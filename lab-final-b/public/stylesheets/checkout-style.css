@@ -1,0 +1,17 @@
+body { background-color: #f8f9fa; font-family: Arial, sans-serif; }
+    .progress-steps {
+      display: flex; justify-content: space-between; margin-bottom: 2rem; text-align: center;
+    }
+    .step { flex: 1; padding: 0.6rem; border: 1px solid #dee2e6; border-radius: 5px; background: #fff; margin: 0 0.3rem; color: #6c757d; }
+    .active { background-color: #0d6efd; color: #fff; font-weight: 600; }
+    @media (min-width: 992px) {
+      .order-summary { position: sticky; top: 1rem; }
+    }
+    .place-order {
+      background: #0d6efd; border: none; color: #fff; padding: 0.75rem 1rem; width: 100%;
+      border-radius: 5px; font-size: 1rem; cursor: pointer; transition: 0.3s;
+    }
+    .place-order:hover { background: #0b5ed7; }
+    #card-details.hidden { display: none; }
+    #order-success { display: none; margin-top: 3rem; text-align: center; }
+    .success-icon { font-size: 3rem; color: #198754; }

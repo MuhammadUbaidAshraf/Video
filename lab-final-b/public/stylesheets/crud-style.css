@@ -1,0 +1,15 @@
+body { background:#f6f8fb; }
+    .app-container { padding: 2rem 1rem; max-width:1200px; margin:0 auto; }
+    .card + .card { margin-top:1rem; }
+    .spinner-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(255,255,255,0.6);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      z-index:1050;
+      display:none;
+    }
+    .clickable { cursor:pointer; }
+    .table-nowrap td, .table-nowrap th { white-space: nowrap; vertical-align: middle; }

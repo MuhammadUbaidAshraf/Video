@@ -1,0 +1,231 @@
+<!-- 
+============================================
+ABOUT PAGE - views/about.ejs
+============================================
+
+Shows company information, team, and story
+-->
+
+<!-- Hero Section -->
+<section class="about-hero py-5" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+    <div class="container text-center">
+        <h1 class="display-3 fw-bold mb-3">About beVideo</h1>
+        <p class="lead">Crafting Stories Through Visual Excellence Since 2010</p>
+    </div>
+</section>
+
+<!-- Our Story Section -->
+<section class="container my-5">
+    <div class="row align-items-center">
+        <div class="col-md-6">
+            <img src="/images/assets/home_video_separator1.png" alt="Our Story" class="img-fluid mb-3">
+            <h2>Our Story</h2>
+            <p class="lead">
+                Founded in 2010, beVideo has been at the forefront of video production innovation.
+            </p>
+            <p>
+                What started as a small team of passionate videographers has grown into a full-service
+                production company serving clients across the country. We believe in the power of
+                storytelling and use cutting-edge technology to bring visions to life.
+            </p>
+            <p>
+                Our work spans corporate videos, documentaries, commercials, weddings, and more.
+                Every project receives the same dedication to excellence, regardless of size or budget.
+            </p>
+        </div>
+        <div class="col-md-6">
+            <img src="/images/assets/home_furniture_home_tree.png" 
+                 alt="Process" 
+                 class="img-fluid rounded shadow">
+        </div>
+    </div>
+</section>
+
+<!-- Mission & Values -->
+<section class="bg-light py-5">
+    <div class="container">
+        <h2 class="text-center mb-5">Our Mission & Values</h2>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center">
+                        <div class="display-4 mb-3">🎯</div>
+                        <h4>Excellence</h4>
+                        <p>
+                            We strive for perfection in every frame, every edit, every project.
+                            Your vision deserves nothing less than our best work.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center">
+                        <div class="display-4 mb-3">💡</div>
+                        <h4>Innovation</h4>
+                        <p>
+                            We embrace new technologies and techniques to stay ahead of the curve
+                            and deliver cutting-edge content.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center">
+                        <div class="display-4 mb-3">🤝</div>
+                        <h4>Partnership</h4>
+                        <p>
+                            We collaborate closely with clients, treating each project as a
+                            partnership to achieve shared goals.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Team Section -->
+<section class="container my-5">
+    <h2 class="text-center mb-5">Meet Our Team</h2>
+    
+    <!--
+    DYNAMIC TEAM MEMBERS (Future)
+    
+    You can pass team data from route:
+    res.render('about', { team: teamMembers })
+    
+    Then loop:
+    <% team.forEach(member => { %>
+        <div class="col-md-3">
+            <img src="<%= member.photo %>" alt="<%= member.name %>">
+            <h5><%= member.name %></h5>
+            <p><%= member.role %></p>
+        </div>
+    <% }) %>
+    -->
+    
+    <div class="row g-4 text-center">
+        <div class="col-md-3">
+            <div class="team-member">
+                <img src="/images/staff/home_video_staff_1.jpg" 
+                     alt="John Doe" 
+                     class="img-fluid rounded-circle mb-3"
+                     style="width: 200px; height: 200px; object-fit: cover;">
+                <h5>John Doe</h5>
+                <p class="text-muted">Founder & Director</p>
+                <p class="small">
+                    With 15 years in the industry, John leads creative direction
+                    and client relationships.
+                </p>
+            </div>
+        </div>
+        
+        <div class="col-md-3">
+            <div class="team-member">
+                <img src="/images/staff/home_video_staff_2-768x1200.jpg" 
+                     alt="Jane Smith" 
+                     class="img-fluid rounded-circle mb-3"
+                     style="width: 200px; height: 200px; object-fit: cover;">
+                <h5>Jane Smith</h5>
+                <p class="text-muted">Lead Producer</p>
+                <p class="small">
+                    Jane manages production logistics and ensures projects
+                    run smoothly from start to finish.
+                </p>
+            </div>
+        </div>
+        
+        <div class="col-md-3">
+            <div class="team-member">
+                <img src="/images/staff/home_video_staff5.png" 
+                     alt="Mike Johnson" 
+                     class="img-fluid rounded-circle mb-3"
+                     style="width: 200px; height: 200px; object-fit: cover;">
+                <h5>Mike Johnson</h5>
+                <p class="text-muted">Head of Post-Production</p>
+                <p class="small">
+                    Mike's editing magic transforms raw footage into
+                    compelling stories.
+                </p>
+            </div>
+        </div>
+        
+        <div class="col-md-3">
+            <div class="team-member">
+                <div class="bg-light rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center"
+                     style="width: 200px; height: 200px;">
+                    <span class="display-3">👤</span>
+                </div>
+                <h5>Sarah Williams</h5>
+                <p class="text-muted">Creative Director</p>
+                <p class="small">
+                    Sarah brings fresh creative perspectives to every project.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Stats Section -->
+<section class="bg-primary text-white py-5">
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-md-3">
+                <div class="display-4 fw-bold">500+</div>
+                <p>Projects Completed</p>
+            </div>
+            <div class="col-md-3">
+                <div class="display-4 fw-bold">200+</div>
+                <p>Happy Clients</p>
+            </div>
+            <div class="col-md-3">
+                <div class="display-4 fw-bold">15</div>
+                <p>Years Experience</p>
+            </div>
+            <div class="col-md-3">
+                <div class="display-4 fw-bold">25+</div>
+                <p>Awards Won</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="container my-5 text-center">
+    <h2 class="mb-4">Ready to Start Your Project?</h2>
+    <p class="lead mb-4">
+        Let's collaborate to bring your vision to life with stunning video content.
+    </p>
+    <div class="d-flex gap-3 justify-content-center">
+        <a href="/contact" class="btn btn-primary btn-lg">Get in Touch</a>
+        <a href="/portfolio" class="btn btn-outline-primary btn-lg">View Our Work</a>
+    </div>
+</section>
+
+<!-- 
+FUTURE ENHANCEMENTS:
+
+1. TESTIMONIALS SLIDER
+   <div class="testimonials-slider">
+       <% testimonials.forEach(t => { %>
+           <blockquote>"<%= t.quote %>" - <%= t.author %></blockquote>
+       <% }) %>
+   </div>
+
+2. TIMELINE
+   Show company history with timeline
+
+3. CERTIFICATIONS/AWARDS
+   Display badges and achievements
+
+4. VIDEO ABOUT US
+   Embed company introduction video
+
+5. BLOG PREVIEW
+   Show latest blog posts
+
+6. CONTACT FORM
+   Quick contact form at bottom
+-->

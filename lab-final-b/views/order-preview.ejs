@@ -1,0 +1,289 @@
+<%- style = `
+<link rel="stylesheet" href="/stylesheets/checkout-style.css">
+<style>
+    .order-preview-card {
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        padding: 2rem;
+        margin-bottom: 1.5rem;
+    }
+    .order-preview-card h5 {
+        color: #0066ff;
+        margin-bottom: 1.5rem;
+        font-weight: 600;
+        border-bottom: 2px solid #e9ecef;
+        padding-bottom: 0.5rem;
+    }
+    .info-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.5rem 0;
+        border-bottom: 1px solid #f0f0f0;
+    }
+    .info-label {
+        font-weight: 600;
+        color: #666;
+    }
+    .item-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 0;
+        border-bottom: 1px solid #e9ecef;
+    }
+    .item-details {
+        flex: 1;
+    }
+    .item-name {
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 0.25rem;
+    }
+    .item-price {
+        color: #666;
+        font-size: 0.9rem;
+    }
+    .item-total {
+        font-weight: 600;
+        color: #0066ff;
+        font-size: 1.1rem;
+    }
+    .total-section {
+        background: #f8f9fa;
+        padding: 1.5rem;
+        border-radius: 5px;
+        margin-top: 1rem;
+    }
+    .total-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.5rem 0;
+        font-size: 1rem;
+    }
+    .total-row.grand-total {
+        border-top: 2px solid #0066ff;
+        margin-top: 1rem;
+        padding-top: 1rem;
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: #0066ff;
+    }
+    .discount-badge {
+        background: #28a745;
+        color: white;
+        padding: 0.25rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+    }
+    .btn-confirm {
+        background: #28a745;
+        border: none;
+        color: white;
+        padding: 1rem 2rem;
+        font-size: 1.1rem;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: all 0.3s;
+        width: 100%;
+        margin-bottom: 1rem;
+    }
+    .btn-confirm:hover {
+        background: #218838;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+    }
+    .btn-back {
+        background: #6c757d;
+        border: none;
+        color: white;
+        padding: 0.75rem 2rem;
+        font-size: 1rem;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: all 0.3s;
+        width: 100%;
+        text-decoration: none;
+        display: inline-block;
+        text-align: center;
+    }
+    .btn-back:hover {
+        background: #5a6268;
+        color: white;
+    }
+    .alert-info {
+        background: #d1ecf1;
+        border: 1px solid #bee5eb;
+        color: #0c5460;
+        padding: 1rem;
+        border-radius: 5px;
+        margin-bottom: 1.5rem;
+    }
+</style>
+` %>
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-10">
+            <h2 class="text-center mb-4" style="color: #0066ff;">Review Your Order</h2>
+
+            <% if (typeof discountInfo !== 'undefined' && discountInfo.applied) { %>
+                <div class="alert alert-success">
+                    <strong>✓ Discount Applied!</strong> 
+                    <span class="discount-badge"><%= discountInfo.code %></span>
+                    - <%= discountInfo.description %>
+                </div>
+            <% } %>
+
+            <% if (typeof orderData !== 'undefined') { %>
+                
+                <!-- Customer Information -->
+                <div class="order-preview-card">
+                    <h5>📍 Shipping Information</h5>
+                    <div class="info-row">
+                        <span class="info-label">Name:</span>
+                        <span><%= orderData.customerInfo.fullname %></span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Email:</span>
+                        <span><%= orderData.customerInfo.email %></span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Phone:</span>
+                        <span><%= orderData.customerInfo.phone %></span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Address:</span>
+                        <span><%= orderData.customerInfo.address %>, <%= orderData.customerInfo.city %>, <%= orderData.customerInfo.postal %></span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Country:</span>
+                        <span><%= orderData.customerInfo.country %></span>
+                    </div>
+                </div>
+
+                <!-- Payment Method -->
+                <div class="order-preview-card">
+                    <h5>💳 Payment Method</h5>
+                    <div class="info-row">
+                        <span class="info-label">Method:</span>
+                        <span>
+                            <% if (orderData.paymentMethod === 'card') { %>
+                                Credit/Debit Card
+                                <% if (orderData.cardDetails && orderData.cardDetails.lastFourDigits) { %>
+                                    (**** <%= orderData.cardDetails.lastFourDigits %>)
+                                <% } %>
+                            <% } else if (orderData.paymentMethod === 'cod') { %>
+                                Cash on Delivery
+                            <% } else if (orderData.paymentMethod === 'wallet') { %>
+                                Digital Wallet
+                            <% } %>
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Order Items -->
+                <div class="order-preview-card">
+                    <h5>🛍️ Order Items</h5>
+                    <% if (orderData.items && orderData.items.length > 0) { %>
+                        <% orderData.items.forEach(item => { %>
+                            <div class="item-row">
+                                <div class="item-details">
+                                    <div class="item-name"><%= item.name %></div>
+                                    <div class="item-price">
+                                        PKR <%= item.price.toFixed(2) %> × <%= item.quantity %>
+                                    </div>
+                                </div>
+                                <div class="item-total">
+                                    PKR <%= (item.price * item.quantity).toFixed(2) %>
+                                </div>
+                            </div>
+                        <% }) %>
+                    <% } else { %>
+                        <p class="text-muted">No items in cart</p>
+                    <% } %>
+                </div>
+
+                <!-- Order Summary -->
+                <div class="order-preview-card">
+                    <h5>💰 Order Summary</h5>
+                    <div class="total-section">
+                        <div class="total-row">
+                            <span>Subtotal:</span>
+                            <span>PKR <%= orderData.pricing.subtotal.toFixed(2) %></span>
+                        </div>
+                        <div class="total-row">
+                            <span>Shipping:</span>
+                            <span>PKR <%= orderData.pricing.shipping.toFixed(2) %></span>
+                        </div>
+                        <div class="total-row">
+                            <span>Tax (2%):</span>
+                            <span>PKR <%= orderData.pricing.tax.toFixed(2) %></span>
+                        </div>
+                        <% if (orderData.pricing.discount > 0) { %>
+                            <div class="total-row" style="color: #28a745;">
+                                <span>Discount (<%= orderData.pricing.couponCode %>):</span>
+                                <span>- PKR <%= orderData.pricing.discount.toFixed(2) %></span>
+                            </div>
+                        <% } %>
+                        <div class="total-row grand-total">
+                            <span>Grand Total:</span>
+                            <span>PKR <%= orderData.pricing.total.toFixed(2) %></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="order-preview-card">
+                    <form action="/order/confirm" method="POST" id="confirmOrderForm">
+                        <!-- Hidden fields to pass order data -->
+                        <input type="hidden" name="fullname" value="<%= orderData.customerInfo.fullname %>">
+                        <input type="hidden" name="email" value="<%= orderData.customerInfo.email %>">
+                        <input type="hidden" name="phone" value="<%= orderData.customerInfo.phone %>">
+                        <input type="hidden" name="address" value="<%= orderData.customerInfo.address %>">
+                        <input type="hidden" name="city" value="<%= orderData.customerInfo.city %>">
+                        <input type="hidden" name="postal" value="<%= orderData.customerInfo.postal %>">
+                        <input type="hidden" name="country" value="<%= orderData.customerInfo.country %>">
+                        <input type="hidden" name="payment" value="<%= orderData.paymentMethod %>">
+                        <% if (orderData.cardDetails) { %>
+                            <input type="hidden" name="cardholder" value="<%= orderData.cardDetails.cardholder || '' %>">
+                            <input type="hidden" name="cardnum" value="****<%= orderData.cardDetails.lastFourDigits %>">
+                        <% } %>
+                        <input type="hidden" name="items" value='<%= JSON.stringify(orderData.items) %>'>
+                        <input type="hidden" name="subtotal" value="<%= orderData.pricing.subtotal %>">
+                        <input type="hidden" name="shipping" value="<%= orderData.pricing.shipping %>">
+                        <input type="hidden" name="tax" value="<%= orderData.pricing.tax %>">
+                        <% if (typeof discountInfo !== 'undefined' && discountInfo.applied) { %>
+                            <input type="hidden" name="coupon" value="<%= discountInfo.code %>">
+                        <% } %>
+
+                        <button type="submit" class="btn-confirm">
+                            ✓ Confirm & Place Order
+                        </button>
+                    </form>
+                    
+                    <a href="/checkout" class="btn-back">
+                        ← Go Back to Checkout
+                    </a>
+                </div>
+
+            <% } else { %>
+                <div class="alert-info">
+                    <p>No order data available. Please go back to checkout and complete the form.</p>
+                    <a href="/checkout" class="btn-back" style="margin-top: 1rem;">Go to Checkout</a>
+                </div>
+            <% } %>
+        </div>
+    </div>
+</div>
+
+<%- script = `
+<script>
+    // Clear cart on successful order placement
+    document.getElementById('confirmOrderForm')?.addEventListener('submit', function() {
+        // Clear localStorage cart
+        localStorage.removeItem('cart');
+    });
+</script>
+` %>

@@ -1,0 +1,390 @@
+<!-- 
+============================================
+CONTACT PAGE - views/contact.ejs
+============================================
+
+Contact form with validation and company information
+-->
+
+<!-- Hero Section -->
+<section class="contact-hero py-5 bg-light">
+    <div class="container text-center">
+        <h1 class="display-4 fw-bold mb-3">Get in Touch</h1>
+        <p class="lead">We'd love to hear about your project!</p>
+    </div>
+</section>
+
+<!-- Main Content -->
+<section class="container my-5">
+    <div class="row g-5">
+        
+        <!-- LEFT: Contact Form -->
+        <div class="col-lg-7">
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-4">
+                    <h3 class="mb-4">Send Us a Message</h3>
+                    
+                    <!-- 
+                    SUCCESS/ERROR MESSAGES
+                    Displayed when form is submitted
+                    -->
+                    <% if (typeof success !== 'undefined' && success) { %>
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <strong>✅ Success!</strong> <%= message || 'Your message has been sent. We\'ll get back to you soon!' %>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                    <% } %>
+                    
+                    <% if (typeof error !== 'undefined' && error) { %>
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <strong>❌ Error!</strong> <%= message || 'Something went wrong. Please try again.' %>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                    <% } %>
+                    
+                    <!-- 
+                    CONTACT FORM
+                    POSTs to /contact route
+                    -->
+                    <form action="/contact" method="POST" id="contactForm">
+                        
+                        <!-- Name -->
+                        <div class="mb-3">
+                            <label for="name" class="form-label">
+                                Your Name <span class="text-danger">*</span>
+                            </label>
+                            <input type="text" 
+                                   class="form-control" 
+                                   id="name" 
+                                   name="name"
+                                   placeholder="John Doe"
+                                   required>
+                        </div>
+                        
+                        <!-- Email -->
+                        <div class="mb-3">
+                            <label for="email" class="form-label">
+                                Email Address <span class="text-danger">*</span>
+                            </label>
+                            <input type="email" 
+                                   class="form-control" 
+                                   id="email" 
+                                   name="email"
+                                   placeholder="john@example.com"
+                                   required>
+                        </div>
+                        
+                        <!-- Phone (Optional) -->
+                        <div class="mb-3">
+                            <label for="phone" class="form-label">
+                                Phone Number
+                            </label>
+                            <input type="tel" 
+                                   class="form-control" 
+                                   id="phone" 
+                                   name="phone"
+                                   placeholder="+92 300 1234567">
+                        </div>
+                        
+                        <!-- Subject -->
+                        <div class="mb-3">
+                            <label for="subject" class="form-label">
+                                Subject <span class="text-danger">*</span>
+                            </label>
+                            <select class="form-select" id="subject" name="subject" required>
+                                <option value="">Choose...</option>
+                                <option value="quote">Request a Quote</option>
+                                <option value="general">General Inquiry</option>
+                                <option value="support">Technical Support</option>
+                                <option value="partnership">Partnership</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        
+                        <!-- Message -->
+                        <div class="mb-3">
+                            <label for="message" class="form-label">
+                                Your Message <span class="text-danger">*</span>
+                            </label>
+                            <textarea class="form-control" 
+                                      id="message" 
+                                      name="message"
+                                      rows="6" 
+                                      placeholder="Tell us about your project..."
+                                      required></textarea>
+                            <div class="form-text">
+                                Please provide as much detail as possible about your project.
+                            </div>
+                        </div>
+                        
+                        <!-- Project Type (Checkboxes) -->
+                        <div class="mb-3">
+                            <label class="form-label">
+                                Interested Services
+                            </label>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="services[]" value="corporate" id="corporate">
+                                        <label class="form-check-label" for="corporate">
+                                            Corporate Videos
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="services[]" value="wedding" id="wedding">
+                                        <label class="form-check-label" for="wedding">
+                                            Wedding Films
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="services[]" value="commercial" id="commercial">
+                                        <label class="form-check-label" for="commercial">
+                                            Commercials
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="services[]" value="documentary" id="documentary">
+                                        <label class="form-check-label" for="documentary">
+                                            Documentaries
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="services[]" value="animation" id="animation">
+                                        <label class="form-check-label" for="animation">
+                                            Animation
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="services[]" value="editing" id="editing">
+                                        <label class="form-check-label" for="editing">
+                                            Editing Only
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Budget Range (Optional) -->
+                        <div class="mb-4">
+                            <label for="budget" class="form-label">
+                                Estimated Budget (PKR)
+                            </label>
+                            <select class="form-select" id="budget" name="budget">
+                                <option value="">Prefer not to say</option>
+                                <option value="50000">Under 50,000</option>
+                                <option value="100000">50,000 - 100,000</option>
+                                <option value="200000">100,000 - 200,000</option>
+                                <option value="500000">200,000 - 500,000</option>
+                                <option value="500001">500,000+</option>
+                            </select>
+                        </div>
+                        
+                        <!-- Submit Button -->
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                📨 Send Message
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <!-- RIGHT: Contact Information -->
+        <div class="col-lg-5">
+            
+            <!-- Contact Info Card -->
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-body p-4">
+                    <h4 class="mb-4">Contact Information</h4>
+                    
+                    <!-- Address -->
+                    <div class="d-flex mb-3">
+                        <div class="me-3" style="font-size: 1.5rem;">📍</div>
+                        <div>
+                            <h6 class="mb-1">Address</h6>
+                            <p class="text-muted mb-0">
+                                123 Video Production Street<br>
+                                Gulberg III, Lahore<br>
+                                Punjab, Pakistan
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <hr>
+                    
+                    <!-- Phone -->
+                    <div class="d-flex mb-3">
+                        <div class="me-3" style="font-size: 1.5rem;">📞</div>
+                        <div>
+                            <h6 class="mb-1">Phone</h6>
+                            <p class="text-muted mb-0">
+                                <a href="tel:+923001234567" class="text-decoration-none">
+                                    +92 300 1234567
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <hr>
+                    
+                    <!-- Email -->
+                    <div class="d-flex mb-3">
+                        <div class="me-3" style="font-size: 1.5rem;">📧</div>
+                        <div>
+                            <h6 class="mb-1">Email</h6>
+                            <p class="text-muted mb-0">
+                                <a href="mailto:info@bevideo.com" class="text-decoration-none">
+                                    info@bevideo.com
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <hr>
+                    
+                    <!-- Hours -->
+                    <div class="d-flex">
+                        <div class="me-3" style="font-size: 1.5rem;">🕐</div>
+                        <div>
+                            <h6 class="mb-1">Business Hours</h6>
+                            <p class="text-muted mb-0">
+                                Monday - Friday: 9:00 AM - 6:00 PM<br>
+                                Saturday: 10:00 AM - 4:00 PM<br>
+                                Sunday: Closed
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Social Media Card -->
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-body p-4 text-center">
+                    <h5 class="mb-3">Follow Us</h5>
+                    <div class="d-flex justify-content-center gap-3">
+                        <a href="https://facebook.com" target="_blank" class="btn btn-outline-primary rounded-circle" style="width: 50px; height: 50px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fab fa-facebook-f"></i> F
+                        </a>
+                        <a href="https://twitter.com" target="_blank" class="btn btn-outline-info rounded-circle" style="width: 50px; height: 50px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fab fa-twitter"></i> T
+                        </a>
+                        <a href="https://instagram.com" target="_blank" class="btn btn-outline-danger rounded-circle" style="width: 50px; height: 50px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fab fa-instagram"></i> I
+                        </a>
+                        <a href="https://youtube.com" target="_blank" class="btn btn-outline-danger rounded-circle" style="width: 50px; height: 50px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fab fa-youtube"></i> Y
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Map Card (Placeholder) -->
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-0">
+                    <div class="bg-secondary text-white text-center py-5">
+                        <div class="display-4 mb-2">🗺️</div>
+                        <p class="mb-0">Google Maps Embed</p>
+                        <small>Coming Soon</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FAQ Section -->
+<section class="bg-light py-5">
+    <div class="container">
+        <h2 class="text-center mb-5">Frequently Asked Questions</h2>
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <div class="accordion" id="faqAccordion">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                                What types of videos do you produce?
+                            </button>
+                        </h2>
+                        <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                We produce corporate videos, commercials, documentaries, wedding films,
+                                music videos, animations, and more. Every project is customized to your needs.
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                                How long does a typical project take?
+                            </button>
+                        </h2>
+                        <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                Timeline varies by project complexity. Simple projects: 1-2 weeks.
+                                Complex productions: 4-8 weeks. We'll provide a detailed timeline during consultation.
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                                What is your pricing structure?
+                            </button>
+                        </h2>
+                        <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                Pricing depends on project scope, duration, crew size, and post-production needs.
+                                Contact us for a free quote tailored to your specific requirements.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 
+ROUTE HANDLER (routes/index.js):
+
+// Show contact form
+router.get('/contact', (req, res) => {
+    res.render('contact', {
+        title: 'Contact Us',
+        pageClass: 'contact-page'
+    });
+});
+
+// Process contact form
+router.post('/contact', async (req, res) => {
+    const { name, email, phone, subject, message, services } = req.body;
+    
+    // Validate
+    if (!name || !email || !message) {
+        return res.render('contact', {
+            title: 'Contact Us',
+            pageClass: 'contact-page',
+            error: true,
+            message: 'Please fill in all required fields.'
+        });
+    }
+    
+    // TODO: 
+    // 1. Save to database
+    // 2. Send email notification
+    // 3. Send confirmation email to user
+    
+    // Success
+    res.render('contact', {
+        title: 'Contact Us',
+        pageClass: 'contact-page',
+        success: true,
+        message: 'Thank you! We\'ll get back to you within 24 hours.'
+    });
+});
+-->
