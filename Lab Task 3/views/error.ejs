@@ -1,0 +1,12 @@
+<%- include('partials/header', { title: 'Error' }) %>
+
+<div class="container text-center py-5">
+    <h1 class="display-1"><%= error.status || 500 %></h1>
+    <h2><%= message %></h2>
+    <% if (error.stack && typeof error.stack !== 'undefined') { %>
+        <pre class="text-start mt-4"><%= error.stack %></pre>
+    <% } %>
+    <a href="/" class="btn btn-primary mt-4">Go Home</a>
+</div>
+
+<%- include('partials/footer') %>
