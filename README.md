@@ -1,4 +1,4 @@
-Assignment 3 README:
+"lab-final-b(Update)" and "Assignment 3" README:
 run the following commands:
 - mongod (In different terminal)
 - npm run seed
