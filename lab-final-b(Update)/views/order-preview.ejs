@@ -1,0 +1,133 @@
+<%- include('partials/header', { title }) %>
+
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-10">
+      <div class="card shadow-lg">
+        <div class="card-header bg-primary text-white">
+          <h3 class="mb-0">Order Preview</h3>
+          <p class="mb-0 small">Please review your order before confirming</p>
+        </div>
+        
+        <div class="card-body p-4">
+          <div class="row">
+            <div class="col-md-8">
+              <h5 class="mb-3">Order Items</h5>
+              <div class="table-responsive">
+                <table class="table table-hover">
+                  <thead class="table-light">
+                    <tr>
+                      <th>Product</th>
+                      <th class="text-center">Quantity</th>
+                      <th class="text-end">Price</th>
+                      <th class="text-end">Subtotal</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% orderData.items.forEach(item => { %>
+                      <tr>
+                        <td><strong><%= item.name %></strong></td>
+                        <td class="text-center"><span class="badge bg-secondary"><%= item.quantity %></span></td>
+                        <td class="text-end">PKR <%= item.price.toFixed(2) %></td>
+                        <td class="text-end"><strong>PKR <%= item.subtotal.toFixed(2) %></strong></td>
+                      </tr>
+                    <% }); %>
+                  </tbody>
+                </table>
+              </div>
+
+              <h5 class="mb-3 mt-4">Customer Information</h5>
+              <div class="card bg-light">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <p><strong>Name:</strong> <%= orderData.customer.fullname %></p>
+                      <p><strong>Email:</strong> <%= orderData.customer.email %></p>
+                      <p><strong>Phone:</strong> <%= orderData.customer.phone %></p>
+                    </div>
+                    <div class="col-md-6">
+                      <p><strong>Address:</strong> <%= orderData.customer.address %></p>
+                      <p><strong>City:</strong> <%= orderData.customer.city %></p>
+                      <p><strong>Postal Code:</strong> <%= orderData.customer.postal %></p>
+                      <p><strong>Country:</strong> <%= orderData.customer.country %></p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <h5 class="mb-3 mt-4">Payment Method</h5>
+              <div class="card bg-light">
+                <div class="card-body">
+                  <p class="mb-0">
+                    <strong>
+                      <% if (orderData.payment.method === 'card') { %>
+                        Credit/Debit Card
+                      <% } else if (orderData.payment.method === 'cod') { %>
+                        Cash on Delivery
+                      <% } else if (orderData.payment.method === 'wallet') { %>
+                        Digital Wallet
+                      <% } %>
+                    </strong>
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <div class="card border-primary">
+                <div class="card-header bg-primary text-white">
+                  <h5 class="mb-0">Order Summary</h5>
+                </div>
+                <div class="card-body">
+                  <div class="d-flex justify-content-between mb-2">
+                    <span>Subtotal:</span>
+                    <span>PKR <%= orderData.subtotal.toFixed(2) %></span>
+                  </div>
+                  <div class="d-flex justify-content-between mb-2">
+                    <span>Shipping:</span>
+                    <span>PKR <%= orderData.shipping.toFixed(2) %></span>
+                  </div>
+                  <div class="d-flex justify-content-between mb-2">
+                    <span>Tax (2%):</span>
+                    <span>PKR <%= orderData.tax.toFixed(2) %></span>
+                  </div>
+                  <% if (orderData.discount > 0) { %>
+                    <div class="d-flex justify-content-between mb-2 text-success">
+                      <span>Discount<% if (orderData.couponCode) { %> (<%= orderData.couponCode %>)<% } %>:</span>
+                      <span>-PKR <%= orderData.discount.toFixed(2) %></span>
+                    </div>
+                  <% } %>
+                  <hr>
+                  <div class="d-flex justify-content-between">
+                    <strong>Grand Total:</strong>
+                    <strong class="text-primary fs-5">PKR <%= (orderData.total || 0).toFixed(2) %></strong>
+                  </div>
+                </div>
+              </div>
+
+              <form method="POST" action="/order/confirm" id="confirmForm">
+                <input type="hidden" name="cart" value='<%= JSON.stringify(orderData.items.map(item => ({ id: item.productId, name: item.name, price: item.price, quantity: item.quantity }))) %>'>
+                <input type="hidden" name="customer" value='<%= JSON.stringify(orderData.customer) %>'>
+                <input type="hidden" name="payment" value='<%= JSON.stringify(orderData.payment) %>'>
+                <input type="hidden" name="subtotal" value="<%= orderData.subtotal %>">
+                <input type="hidden" name="shipping" value="<%= orderData.shipping %>">
+                <input type="hidden" name="tax" value="<%= orderData.tax %>">
+                <input type="hidden" name="couponCode" value="<%= orderData.couponCode || '' %>">
+                
+                <button type="submit" class="btn btn-success btn-lg w-100 mt-3">
+                  Confirm Order
+                </button>
+              </form>
+              
+              <a href="/checkout" class="btn btn-outline-secondary w-100 mt-2">
+                Go Back to Cart
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('partials/footer') %>

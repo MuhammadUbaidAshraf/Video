@@ -1,0 +1,148 @@
+<%- include('partials/header') %>
+
+<section class="hero-section">
+    <div class="content-container">
+        <div class="sidebar" id="left-sidebar">
+            <img src="/assets/splash_slider_arrow_left.png" alt="left arrow">
+        </div>
+        <div id="vid">
+            <video class="video" controls width="100%" height="100%" autoplay>
+                <source src="/videos/SPRING REEL 2014.mp4" type="video/mp4" />
+                <p>
+                    Your browser doesn't support this video. Here is a
+                    <a href="https://player.vimeo.com/video/94640679">link to the video</a> instead.
+                </p>
+            </video>
+        </div>
+        <div class="sidebar" id="right-sidebar">
+            <img src="/assets/splash_slider_arrow_right.png" alt="right arrow">
+        </div>
+    </div>
+</section>
+
+<main>
+    <div class="maindiv1">
+        <div id="content1">
+            <img src="/assets/home_video_separator1.png" id="home_video_separator1">
+            <hr style="border: none; margin: 0 auto 20px auto ;">
+            <h3 class="heading">WE WORK HARD TO MAKE THE VIDEO WORTH YOU</h3>
+            <hr style="border: none; margin: 0 auto 20px auto ;">
+            <div class="content11">
+                <img src="/assets/home_video_circle1.png" class="circle" alt="Info Circle 1">
+                <div>
+                    <h5>Cras ac arcu ac mauris orci gravida</h5>
+                    <hr style="border: none; margin: 0 auto 10px auto ;">
+                    <p>Vestibulum commodo volutpat a, convallis ac, laoreet enim. Phasellus fermentum in, dolor. Pellentesque facilisis. Nulla imperdiet sit.</p>
+                    <hr style="border: none; margin: 0 auto 10px auto ;">
+                </div>
+            </div>
+            
+            <hr style="border: none; margin: 0 auto 20px auto ;">
+
+            <div class="content12">
+                <img src="/assets/home_video_circle2.png" class="circle" alt="Info Circle 2">
+                <div>
+                    <h5>Aliquam posuere cubilia curae duis</h5>
+                    <hr style="border: none; margin: 0 auto 10px auto ;">
+                    <p>Pellentesque facilisis. Nulla imperdiet sit amet magna. Vestibulum dapibus, mauris nec malesuada fames ac turpis.</p>
+                    <hr style="border: none; margin: 0 auto 10px auto ;">
+                </div>
+            </div>
+            <hr style="border: none; margin: 0 auto 20px auto ;">
+            <a href="#"><span>See More</span></a>
+        </div>
+        <div id="tree">
+            <img src="/assets/home_furniture_home_tree.png" id="home_furniture_home_tree" alt="Tree Diagram">
+        </div>
+    </div>
+
+    <section class="products-section container text-center my-5">
+        <img src="/assets/home_video_separator1.png" alt="Separator" style="max-width: 100%; height: auto;">
+        <h2 class="mt-4 mb-4">OUR PRODUCTS</h2>
+        <div class="row justify-content-center">
+            <% products.forEach(product => { %>
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 shadow-sm">
+                        <img src="<%= product.image %>" class="card-img-top" alt="<%= product.name %>">
+                        <div class="card-body">
+                            <h5 class="card-title"><%= product.name %></h5>
+                            <p class="card-text text-muted"><%= product.description %></p>
+                            <p class="card-text"><strong>PKR <%= product.price.toFixed(2) %></strong></p>
+                            <button onclick="addToCart({id: '<%= product.id %>', name: '<%= product.name %>', price: <%= product.price %>})" class="btn btn-primary w-100">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+            <% }); %>
+        </div>
+        <hr class="my-5">
+    </section>
+
+    <div class="stuff">
+        <h2>OUR STUFF</h2>
+        <div class="imgContainer">
+            <div class="image">
+                <img src="/staff/home_video_staff_1.jpg" alt="Staff 1">
+            </div>
+            <div class="image">
+                <img src="/staff/home_video_staff_2-768x1200.jpg" alt="Staff 2">
+            </div>
+            <div class="image">
+                <img src="/staff/home_video_staff5.png" alt="Staff 3">
+            </div>
+        </div>
+    </div>
+
+    <section class="container row text-center">
+        <hr style="border: 10px; margin: 20px auto 20px auto ;">
+        <h2>CUSTOMER TESTIMONIALS</h2>
+        <hr style="border: none; margin: 20px auto 20px auto ;">
+        
+        <% testimonials.slice(0, 2).forEach(testimonial => { %>
+            <div class="col-md-6">
+                <h4><%= testimonial.name %></h4>
+                <img class="rounded-circle" src="<%= testimonial.image %>" alt="<%= testimonial.name %>">
+                <p>Rating: <i><%= testimonial.rating %></i></p>
+                <p><%= testimonial.text %></p>
+            </div>
+        <% }); %>
+
+        <a href="#forMore" class="text-center" id="bottom"><img src="/assets/splash_slider_arrow_bottom.png" alt=""></a>
+        
+        <div class="row" id="forMore">
+            <% testimonials.slice(2).forEach(testimonial => { %>
+                <div class="col-md-6">
+                    <h4><%= testimonial.name %></h4>
+                    <img class="rounded-circle" src="<%= testimonial.image %>" alt="<%= testimonial.name %>">
+                    <p>Rating: <i><%= testimonial.rating %></i></p>
+                    <p><%= testimonial.text %></p>
+                </div>
+            <% }); %>
+        </div>
+    </section>
+
+    <div class="client">
+        <img src="/assets/home_video_separator1.png" alt="Separator">
+        <h2>OUR CLIENTS</h2>
+        <h5>Vulla imperdiet sit amet magna vestibulum dapibus</h5>
+        <div>
+            <ul>
+                <li><a href="#"><img src="/clients/client_1-145x75.png" alt="Zeisson"></a></li>
+                <li><a href="#"><img src="/clients/client_2-145x75.png" alt="Excerpt"></a></li>
+                <li><a href="#"><img src="/clients/client_3-145x75.png" alt="Folive"></a></li>
+                <li><a href="#"><img src="/clients/client_4-145x75.png" alt="Koparu"></a></li>
+                <li><a href="#"><img src="/clients/client_5-145x75.png" alt="Sohau"></a></li>
+                <li><a href="#"><img src="/clients/client_6-145x75.png" alt="Barook"></a></li>
+            </ul>
+        </div>
+    </div>
+</main>
+
+<% 
+const inlineJS = `
+<script>
+    document.addEventListener('DOMContentLoaded', updateCartCount);
+</script>
+`;
+%>
+
+<%- include('partials/footer', { inlineJS }) %>
