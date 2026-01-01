@@ -1,0 +1,1374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Full Stack JavaScript Course - Topics 1-60</title>
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg-dark: #0a0e27;
+      --bg-card: #151932;
+      --bg-hover: #1e2440;
+      --text-primary: #e2e8f0;
+      --text-secondary: #94a3b8;
+      --accent-cyan: #06b6d4;
+      --accent-pink: #ec4899;
+      --accent-purple: #8b5cf6;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --error: #ef4444;
+      --info: #3b82f6;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg-dark);
+      color: var(--text-primary);
+      line-height: 1.6;
+    }
+
+    .container {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      width: 320px;
+      background: var(--bg-card);
+      border-right: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 2rem;
+      overflow-y: auto;
+      position: fixed;
+      height: 100vh;
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-pink));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 0.5rem;
+    }
+
+    .progress-bar {
+      background: var(--bg-hover);
+      height: 8px;
+      border-radius: 4px;
+      margin: 1rem 0;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple));
+      transition: width 0.3s;
+    }
+
+    .section-group {
+      margin-top: 1.5rem;
+    }
+
+    .section-title {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-secondary);
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+    }
+
+    .main-content {
+      margin-left: 320px;
+      flex: 1;
+      padding: 3rem;
+      max-width: 1200px;
+    }
+
+    .topic-header {
+      margin-bottom: 3rem;
+    }
+
+    .topic-title {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-pink));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .topic-subtitle {
+      font-size: 1.2rem;
+      color: var(--text-secondary);
+    }
+
+    .content-section {
+      margin: 2rem 0;
+    }
+
+    .explanation {
+      font-size: 1.1rem;
+      line-height: 1.8;
+      color: var(--text-primary);
+      margin: 1.5rem 0;
+    }
+
+    .info-box {
+      background: rgba(59, 130, 246, 0.1);
+      border-left: 4px solid var(--info);
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      border-radius: 8px;
+    }
+
+    .info-box h4 {
+      color: var(--info);
+      margin-bottom: 0.5rem;
+    }
+
+    .warning-box {
+      background: rgba(245, 158, 11, 0.1);
+      border-left: 4px solid var(--warning);
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      border-radius: 8px;
+    }
+
+    .warning-box h4 {
+      color: var(--warning);
+      margin-bottom: 0.5rem;
+    }
+
+    .code-block {
+      background: var(--bg-card);
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      border-left: 4px solid var(--accent-cyan);
+      position: relative;
+    }
+
+    .code-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .code-title {
+      color: var(--accent-cyan);
+      font-weight: 600;
+    }
+
+    .code-buttons {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .code-button {
+      padding: 0.5rem 1rem;
+      background: var(--bg-hover);
+      border: none;
+      border-radius: 6px;
+      color: var(--text-secondary);
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: all 0.2s;
+    }
+
+    .code-button:hover {
+      background: var(--accent-cyan);
+      color: white;
+    }
+
+    pre {
+      overflow-x: auto;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    .output-container {
+      background: #000;
+      padding: 1rem;
+      border-radius: 6px;
+      margin-top: 1rem;
+      font-family: 'Courier New', monospace;
+    }
+
+    .output-header {
+      color: var(--accent-cyan);
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+    }
+
+    .output-content {
+      color: #0f0;
+      white-space: pre-wrap;
+    }
+
+    .quiz-container {
+      margin-top: 3rem;
+      padding: 2rem;
+      background: var(--bg-card);
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .quiz-header {
+      font-size: 1.3rem;
+      margin-bottom: 1rem;
+      color: var(--accent-purple);
+    }
+
+    .quiz-question {
+      font-size: 1.1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .quiz-option {
+      padding: 1rem;
+      margin: 0.5rem 0;
+      background: var(--bg-hover);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: 2px solid transparent;
+    }
+
+    .quiz-option:hover {
+      transform: translateX(4px);
+      border-color: var(--accent-cyan);
+    }
+
+    .quiz-option.selected {
+      border-color: var(--accent-cyan);
+      background: rgba(6, 182, 212, 0.2);
+    }
+
+    .quiz-option.correct {
+      background: var(--success);
+      border-color: var(--success);
+    }
+
+    .quiz-option.incorrect {
+      background: var(--error);
+      border-color: var(--error);
+    }
+
+    .quiz-feedback {
+      margin-top: 1.5rem;
+      padding: 1.5rem;
+      border-radius: 8px;
+    }
+
+    .quiz-feedback.correct {
+      background: rgba(16, 185, 129, 0.2);
+      border-left: 4px solid var(--success);
+    }
+
+    .quiz-feedback.incorrect {
+      background: rgba(239, 68, 68, 0.2);
+      border-left: 4px solid var(--error);
+    }
+
+    button {
+      padding: 0.75rem 1.5rem;
+      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+      border: none;
+      border-radius: 8px;
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.2s;
+      font-size: 1rem;
+    }
+
+    button:hover:not(:disabled) {
+      transform: translateY(-2px);
+    }
+
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .nav-buttons {
+      display: flex;
+      gap: 1rem;
+      margin-top: 3rem;
+    }
+
+    .topic-list {
+      margin-top: 1rem;
+    }
+
+    .topic-item {
+      padding: 0.75rem;
+      margin: 0.5rem 0;
+      background: var(--bg-hover);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .topic-item:hover {
+      transform: translateX(4px);
+      background: rgba(6, 182, 212, 0.2);
+    }
+
+    .topic-item.active {
+      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+    }
+
+    .topic-item.completed {
+      border-left: 3px solid var(--success);
+    }
+
+    .checkmark {
+      color: var(--success);
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState } = React;
+
+    const courseData = [
+      // Simplified Topics 1-20 (foundation)
+      {
+        id: 'object-literals',
+        title: 'Object Literals',
+        subtitle: 'JavaScript Object Basics',
+        icon: '📦',
+        section: 'JavaScript Fundamentals',
+        content: [
+          { type: 'explanation', text: 'Objects are collections of key-value pairs, fundamental to JavaScript.' },
+          { type: 'code', title: 'Basic Object', code: 'const person = {\n  name: "Alice",\n  age: 25,\n  greet() {\n    console.log(`Hi, I am ${this.name}`);\n  }\n};\n\nconsole.log(person.name);\nperson.greet();', runnable: true }
+        ],
+        quiz: { question: 'How do you access an object property?', options: ['object.property or object["property"]', 'Only brackets', 'Only dot notation', 'Cannot be accessed'], correct: 0, explanation: 'Use dot notation or bracket notation.' }
+      },
+
+      // Topics 21-40 from previous version (Async, Node.js, Express) - abbreviated here
+      {
+        id: 'callbacks-hell',
+        title: 'Callbacks & Callback Hell',
+        subtitle: 'Understanding Nested Callbacks',
+        icon: '📞',
+        section: 'Async Programming',
+        content: [
+          { type: 'explanation', text: 'Callbacks are functions passed as arguments. Callback hell occurs when nested deeply.' },
+          { type: 'code', title: 'Callback Hell', code: 'setTimeout(() => {\n  console.log("Step 1");\n  setTimeout(() => {\n    console.log("Step 2");\n    setTimeout(() => {\n      console.log("Step 3");\n    }, 1000);\n  }, 1000);\n}, 1000);', runnable: true }
+        ],
+        quiz: { question: 'What is callback hell?', options: ['Errors in callbacks', 'Deeply nested callbacks hard to read', 'Slow callbacks', 'Too many callbacks'], correct: 1, explanation: 'Callback hell is deeply nested callbacks (pyramid of doom).' }
+      },
+      {
+        id: 'promises',
+        title: 'Promises',
+        subtitle: 'Better Async Handling',
+        icon: '🤝',
+        section: 'Async Programming',
+        content: [
+          { type: 'explanation', text: 'Promises represent eventual completion or failure of async operations.' },
+          { type: 'code', title: 'Creating Promise', code: 'const promise = new Promise((resolve, reject) => {\n  setTimeout(() => resolve("Success!"), 1000);\n});\n\npromise.then(result => console.log(result));', runnable: true }
+        ],
+        quiz: { question: 'What does a Promise represent?', options: ['Sync code', 'Eventual completion/failure of async op', 'Loop', 'Variable'], correct: 1, explanation: 'Promise represents eventual completion or failure.' }
+      },
+      {
+        id: 'express-intro',
+        title: 'Express.js Basics',
+        subtitle: 'Web Framework',
+        icon: '⚡',
+        section: 'Express.js',
+        content: [
+          { type: 'explanation', text: 'Express.js is a minimal web framework for Node.js.' },
+          { type: 'code', title: 'Express Server', code: 'const express = require("express");\nconst app = express();\n\napp.get("/", (req, res) => {\n  res.send("Hello!");\n});\n\napp.listen(3000);', runnable: false }
+        ],
+        quiz: { question: 'What is Express.js?', options: ['Database', 'Web framework for Node.js', 'Testing library', 'Template engine'], correct: 1, explanation: 'Express.js is a web framework for Node.js.' }
+      },
+
+      // TOPICS 41-50: MONGODB & MONGOOSE
+      {
+        id: 'mongodb-intro',
+        title: 'MongoDB & Mongoose Basics',
+        subtitle: 'NoSQL Database Introduction',
+        icon: '🍃',
+        section: 'MongoDB & Mongoose',
+        content: [
+          {
+            type: 'explanation',
+            text: 'MongoDB is a NoSQL database that stores data in flexible, JSON-like documents. Mongoose is an ODM (Object Data Modeling) library for MongoDB.'
+          },
+          {
+            type: 'info',
+            title: 'Why MongoDB?',
+            text: 'Advantages:\n✅ Flexible schema (no rigid tables)\n✅ JSON-like documents (BSON)\n✅ Horizontal scaling\n✅ Fast for read-heavy applications\n✅ Great for rapid development\n\nWhen to use:\n• Flexible data structures\n• Real-time analytics\n• Content management\n• IoT applications'
+          },
+          {
+            type: 'code',
+            title: 'Connecting to MongoDB',
+            code: 'const mongoose = require("mongoose");\n\n// Connect to MongoDB\nmongoose.connect("mongodb://localhost:27017/myapp", {\n  useNewUrlParser: true,\n  useUnifiedTopology: true\n})\n.then(() => console.log("Connected to MongoDB"))\n.catch(err => console.error("Connection error:", err));',
+            runnable: false
+          }
+        ],
+        quiz: {
+          question: 'What type of database is MongoDB?',
+          options: ['SQL/Relational', 'NoSQL/Document-based', 'Graph database', 'Key-value store'],
+          correct: 1,
+          explanation: 'MongoDB is a NoSQL database that stores data in flexible, JSON-like documents.'
+        }
+      },
+      {
+        id: 'mongoose-schemas',
+        title: 'Schemas & Models',
+        subtitle: 'Defining Data Structure',
+        icon: '📋',
+        section: 'MongoDB & Mongoose',
+        content: [
+          {
+            type: 'explanation',
+            text: 'Schemas define the structure of documents. Models are compiled from schemas and create/read documents.'
+          },
+          {
+            type: 'code',
+            title: 'Creating a Schema',
+            code: 'const mongoose = require("mongoose");\n\n// Define schema\nconst userSchema = new mongoose.Schema({\n  name: { type: String, required: true },\n  email: { type: String, required: true, unique: true },\n  age: { type: Number, min: 0, max: 120 },\n  isActive: { type: Boolean, default: true },\n  createdAt: { type: Date, default: Date.now }\n});\n\n// Create model\nconst User = mongoose.model("User", userSchema);\n\nmodule.exports = User;',
+            runnable: false
+          },
+          {
+            type: 'info',
+            title: 'Schema Types',
+            text: 'Available types:\n• String\n• Number\n• Date\n• Boolean\n• Array\n• ObjectId (references)\n• Mixed (any type)\n• Buffer\n• Decimal128\n• Map'
+          }
+        ],
+        quiz: {
+          question: 'What is a Mongoose schema?',
+          options: ['A database', 'Defines structure of documents', 'A connection string', 'A query language'],
+          correct: 1,
+          explanation: 'A schema defines the structure and validation rules for documents in a collection.'
+        }
+      },
+      {
+        id: 'mongoose-crud',
+        title: 'CRUD Operations',
+        subtitle: 'Create, Read, Update, Delete',
+        icon: '✏️',
+        section: 'MongoDB & Mongoose',
+        content: [
+          {
+            type: 'explanation',
+            text: 'Mongoose provides simple methods for CRUD operations on MongoDB documents.'
+          },
+          {
+            type: 'code',
+            title: 'Create Documents',
+            code: '// Method 1: Using save()\nconst user = new User({\n  name: "Alice",\n  email: "alice@example.com",\n  age: 25\n});\nawait user.save();\n\n// Method 2: Using create()\nconst user2 = await User.create({\n  name: "Bob",\n  email: "bob@example.com"\n});\n\n// Create multiple\nconst users = await User.insertMany([\n  { name: "Charlie", email: "charlie@example.com" },\n  { name: "David", email: "david@example.com" }\n]);',
+            runnable: false
+          },
+          {
+            type: 'code',
+            title: 'Read Documents',
+            code: '// Find all\nconst users = await User.find();\n\n// Find with conditions\nconst activeUsers = await User.find({ isActive: true });\n\n// Find one\nconst user = await User.findOne({ email: "alice@example.com" });\n\n// Find by ID\nconst user = await User.findById("507f1f77bcf86cd799439011");\n\n// Select specific fields\nconst users = await User.find().select("name email -_id");\n\n// Limit and skip (pagination)\nconst users = await User.find().limit(10).skip(20);',
+            runnable: false
+          },
+          {
+            type: 'code',
+            title: 'Update Documents',
+            code: '// Update one\nawait User.updateOne(\n  { email: "alice@example.com" },\n  { age: 26 }\n);\n\n// Update many\nawait User.updateMany(\n  { isActive: false },\n  { isActive: true }\n);\n\n// Find and update\nconst user = await User.findByIdAndUpdate(\n  "507f1f77bcf86cd799439011",\n  { age: 27 },\n  { new: true } // Return updated document\n);',
+            runnable: false
+          },
+          {
+            type: 'code',
+            title: 'Delete Documents',
+            code: '// Delete one\nawait User.deleteOne({ email: "alice@example.com" });\n\n// Delete many\nawait User.deleteMany({ isActive: false });\n\n// Find and delete\nconst deletedUser = await User.findByIdAndDelete(\n  "507f1f77bcf86cd799439011"\n);',
+            runnable: false
+          }
+        ],
+        quiz: {
+          question: 'Which method returns the updated document?',
+          options: ['updateOne()', 'updateMany()', 'findByIdAndUpdate() with {new: true}', 'save()'],
+          correct: 2,
+          explanation: 'findByIdAndUpdate() with {new: true} option returns the updated document instead of the original.'
+        }
+      },
+      {
+        id: 'mongoose-queries',
+        title: 'Querying & Query Operators',
+        subtitle: 'Advanced Queries',
+        icon: '🔍',
+        section: 'MongoDB & Mongoose',
+        content: [
+          {
+            type: 'explanation',
+            text: 'MongoDB provides powerful query operators for complex data retrieval.'
+          },
+          {
+            type: 'code',
+            title: 'Comparison Operators',
+            code: '// $gt, $gte, $lt, $lte (greater/less than)\nconst adults = await User.find({ age: { $gte: 18 } });\n\n// $ne (not equal)\nconst notBob = await User.find({ name: { $ne: "Bob" } });\n\n// $in (in array)\nconst specificUsers = await User.find({\n  name: { $in: ["Alice", "Bob", "Charlie"] }\n});\n\n// $nin (not in array)\nconst others = await User.find({\n  name: { $nin: ["Alice", "Bob"] }\n});',
+            runnable: false
+          },
+          {
+            type: 'code',
+            title: 'Logical Operators',
+            code: '// $and\nconst results = await User.find({\n  $and: [\n    { age: { $gte: 18 } },\n    { isActive: true }\n  ]\n});\n\n// $or\nconst results = await User.find({\n  $or: [\n    { age: { $lt: 18 } },\n    { isActive: false }\n  ]\n});\n\n// $not\nconst results = await User.find({\n  age: { $not: { $lt: 18 } }\n});',
+            runnable: false
+          },
+          {
+            type: 'code',
+            title: 'String Pattern Matching',
+            code: '// $regex for pattern matching\nconst results = await User.find({\n  name: { $regex: /^A/i } // Starts with A (case insensitive)\n});\n\n// Contains\nconst results = await User.find({\n  email: { $regex: /gmail/ }\n});\n\n// Ends with\nconst results = await User.find({\n  name: { $regex: /son$/ }\n});',
+            runnable: false
+          }
+        ],
+        quiz: {
+          question: 'What does { age: { $gte: 18 } } mean?',
+          options: ['Age is 18', 'Age is greater than 18', 'Age is greater than or equal to 18', 'Age is not 18'],
+          correct: 2,
+          explanation: '$gte means "greater than or equal to", so it finds documents where age >= 18.'
+        }
+      },
+      {
+        id: 'mongoose-validation',
+        title: 'Validation',
+        subtitle: 'Built-in & Custom Validators',
+        icon: '✅',
+        section: 'MongoDB & Mongoose',
+        content: [
+          {
+            type: 'explanation',
+            text: 'Mongoose provides built-in validators and allows custom validation for data integrity.'
+          },
+          {
+            type: 'code',
+            title: 'Built-in Validators',
+            code: 'const userSchema = new mongoose.Schema({\n  name: {\n    type: String,\n    required: [true, "Name is required"],\n    minlength: [3, "Name must be at least 3 characters"],\n    maxlength: [50, "Name cannot exceed 50 characters"],\n    trim: true\n  },\n  email: {\n    type: String,\n    required: true,\n    unique: true,\n    lowercase: true,\n    match: [/^\\S+@\\S+\\.\\S+$/, "Invalid email format"]\n  },\n  age: {\n    type: Number,\n    min: [0, "Age cannot be negative"],\n    max: [120, "Age must be realistic"]\n  },\n  role: {\n    type: String,\n    enum: ["user", "admin", "moderator"],\n    default: "user"\n  }\n});',
+            runnable: false
+          },
+          {
+            type: 'code',
+            title: 'Custom Validators',
+            code: 'const userSchema = new mongoose.Schema({\n  password: {\n    type: String,\n    required: true,\n    validate: {\n      validator: function(v) {\n        // Password must be at least 8 characters\n        // and contain number and letter\n        return v.length >= 8 && /\\d/.test(v) && /[a-zA-Z]/.test(v);\n      },\n      message: "Password must be 8+ chars with letters and numbers"\n    }\n  },\n  confirmPassword: {\n    type: String,\n    required: true,\n    validate: {\n      validator: function(v) {\n        return v === this.password;\n      },\n      message: "Passwords do not match"\n    }\n  }\n});',
+            runnable: false
+          },
+          {
+            type: 'warning',
+            title: 'Validation Rules',
+            text: 'Important points:\n\n❌ Validation does NOT run on update by default\n✅ Use { runValidators: true } option\n\n❌ unique is NOT a validator (its an index)\n✅ Use custom validator for uniqueness\n\nValidation runs on:\n• save()\n• create()\n• validate()\n• update() with runValidators: true'
+          }
+        ],
+        quiz: {
+          question: 'When does validation run by default?',
+          options: ['Always', 'On save() and create() only', 'On update() only', 'Never'],
+          correct: 1,
+          explanation: 'Validation runs automatically on save() and create(). For updates, use runValidators: true.'
+        }
+      },
+      {
+        id: 'mongoose-relationships',
+        title: 'Relationships & Populate',
+        subtitle: 'Connecting Documents',
+        icon: '🔗',
+        section: 'MongoDB & Mongoose',
+        content: [
+          {
+            type: 'explanation',
+            text: 'MongoDB supports relationships between documents using references (similar to foreign keys in SQL).'
+          },
+          {
+            type: 'code',
+            title: 'One-to-Many Relationship',
+            code: '// Author schema\nconst authorSchema = new mongoose.Schema({\n  name: String,\n  email: String\n});\n\n// Book schema with reference\nconst bookSchema = new mongoose.Schema({\n  title: String,\n  author: {\n    type: mongoose.Schema.Types.ObjectId,\n    ref: "Author", // Reference to Author model\n    required: true\n  },\n  publishedDate: Date\n});\n\nconst Author = mongoose.model("Author", authorSchema);\nconst Book = mongoose.model("Book", bookSchema);',
+            runnable: false
+          },
+          {
+            type: 'code',
+            title: 'Using Populate',
+            code: '// Create author\nconst author = await Author.create({\n  name: "J.K. Rowling",\n  email: "jk@example.com"\n});\n\n// Create book with author reference\nconst book = await Book.create({\n  title: "Harry Potter",\n  author: author._id\n});\n\n// Populate author details\nconst bookWithAuthor = await Book.findById(book._id)\n  .populate("author"); // Replaces ID with full author document\n\nconsole.log(bookWithAuthor.author.name); // "J.K. Rowling"\n\n// Populate specific fields only\nconst book = await Book.findById(id)\n  .populate("author", "name email -_id");',
+            runnable: false
+          },
+          {
+            type: 'code',
+            title: 'Many-to-Many Relationship',
+            code: '// Student schema\nconst studentSchema = new mongoose.Schema({\n  name: String,\n  courses: [{\n    type: mongoose.Schema.Types.ObjectId,\n    ref: "Course"\n  }]\n});\n\n// Course schema\nconst courseSchema = new mongoose.Schema({\n  title: String,\n  students: [{\n    type: mongoose.Schema.Types.ObjectId,\n    ref: "Student"\n  }]\n});\n\n// Enroll student in course\nconst student = await Student.findById(studentId);\nconst course = await Course.findById(courseId);\n\nstudent.courses.push(course._id);\ncourse.students.push(student._id);\n\nawait student.save();\nawait course.save();',
+            runnable: false
+          }
+        ],
+        quiz: {
+          question: 'What does populate() do?',
+          options: ['Creates new documents', 'Replaces ObjectId references with actual documents', 'Deletes documents', 'Validates documents'],
+          correct: 1,
+          explanation: 'populate() replaces ObjectId references with the actual referenced documents from another collection.'
+        }
+      },
+      {
+        id: 'mongoose-virtuals',
+        title: 'Virtuals',
+        subtitle: 'Computed Properties',
+        icon: '🎭',
+        section: 'MongoDB & Mongoose',
+        content: [
+          {
+            type: 'explanation',
+            text: 'Virtuals are document properties that you can get and set but are not persisted to MongoDB.'
+          },
+          {
+            type: 'code',
+            title: 'Creating Virtuals',
+            code: 'const userSchema = new mongoose.Schema({\n  firstName: String,\n  lastName: String,\n  dateOfBirth: Date\n});\n\n// Virtual for full name\nuserSchema.virtual("fullName").get(function() {\n  return `${this.firstName} ${this.lastName}`;\n});\n\n// Virtual with setter\nuserSchema.virtual("fullName").set(function(name) {\n  const parts = name.split(" ");\n  this.firstName = parts[0];\n  this.lastName = parts[1];\n});\n\n// Virtual for age\nuserSchema.virtual("age").get(function() {\n  const today = new Date();\n  const birthDate = new Date(this.dateOfBirth);\n  let age = today.getFullYear() - birthDate.getFullYear();\n  const monthDiff = today.getMonth() - birthDate.getMonth();\n  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {\n    age--;\n  }\n  return age;\n});',
+            runnable: false
+          },
+          {
+            type: 'code',
+            title: 'Using Virtuals',
+            code: 'const User = mongoose.model("User", userSchema);\n\nconst user = new User({\n  firstName: "John",\n  lastName: "Doe",\n  dateOfBirth: new Date("1990-05-15")\n});\n\nconsole.log(user.fullName); // "John Doe"\nconsole.log(user.age); // Calculated from date of birth\n\n// Using setter\nuser.fullName = "Jane Smith";\nconsole.log(user.firstName); // "Jane"\nconsole.log(user.lastName); // "Smith"',
+            runnable: false
+          },
+          {
+            type: 'info',
+            title: 'Virtual Properties',
+            text: 'Key points:\n\n✅ Not stored in database\n✅ Computed on the fly\n✅ Can have getters and setters\n✅ Great for derived data\n\nUse cases:\n• Full names from first/last\n• Age from date of birth\n• URL slugs\n• Formatted data'
+          }
+        ],
+        quiz: {
+          question: 'Are virtuals stored in the database?',
+          options: ['Yes, always', 'No, they are computed properties', 'Only if you save them', 'Only with special flag'],
+          correct: 1,
+          explanation: 'Virtuals are computed properties that are not persisted to MongoDB. They are calculated on-the-fly.'
+        }
+      },
+      {
+        id: 'mongoose-middleware',
+        title: 'Middleware (Hooks)',
+        subtitle: 'Pre & Post Hooks',
+        icon: '🪝',
+        section: 'MongoDB & Mongoose',
+        content: [
+          {
+            type: 'explanation',
+            text: 'Middleware (hooks) are functions that run at specific stages of document lifecycle.'
+          },
+          {
+            type: 'code',
+            title: 'Pre Middleware',
+            code: 'const userSchema = new mongoose.Schema({\n  name: String,\n  email: String,\n  password: String,\n  createdAt: Date\n});\n\n// Pre-save middleware\nuserSchema.pre("save", function(next) {\n  console.log("About to save user...");\n  \n  // Set createdAt if new document\n  if (this.isNew) {\n    this.createdAt = new Date();\n  }\n  \n  next(); // MUST call next()\n});\n\n// Hash password before saving\nuserSchema.pre("save", async function(next) {\n  if (this.isModified("password")) {\n    const bcrypt = require("bcrypt");\n    this.password = await bcrypt.hash(this.password, 10);\n  }\n  next();\n});',
+            runnable: false
+          },
+          {
+            type: 'code',
+            title: 'Post Middleware',
+            code: '// Post-save middleware (after save completes)\nuserSchema.post("save", function(doc, next) {\n  console.log(`User ${doc.name} was saved`);\n  next();\n});\n\n// Post-find middleware\nuserSchema.post("find", function(docs, next) {\n  console.log(`Found ${docs.length} users`);\n  next();\n});\n\n// Post-remove middleware\nuserSchema.post("remove", function(doc, next) {\n  console.log(`User ${doc.name} was deleted`);\n  // Clean up related data\n  next();\n});',
+            runnable: false
+          },
+          {
+            type: 'info',
+            title: 'Middleware Types',
+            text: 'Available hooks:\n\n• validate\n• save\n• remove\n• updateOne\n• deleteOne\n• find\n• findOne\n• init\n\nUse cases:\n• Hash passwords\n• Set timestamps\n• Validate complex logic\n• Clean up related data\n• Logging\n• Triggering events'
+          }
+        ],
+        quiz: {
+          question: 'When does pre("save") middleware run?',
+          options: ['After saving', 'Before saving', 'During find', 'After delete'],
+          correct: 1,
+          explanation: 'Pre middleware runs BEFORE the specified operation. pre("save") runs before save().'
+        }
+      },
+      {
+        id: 'mongoose-methods',
+        title: 'Instance & Static Methods',
+        subtitle: 'Custom Model Methods',
+        icon: '⚙️',
+        section: 'MongoDB & Mongoose',
+        content: [
+          {
+            type: 'explanation',
+            text: 'Add custom methods to models for reusable business logic.'
+          },
+          {
+            type: 'code',
+            title: 'Instance Methods',
+            code: 'const userSchema = new mongoose.Schema({\n  name: String,\n  email: String,\n  password: String\n});\n\n// Instance method (called on document)\nuserSchema.methods.comparePassword = async function(candidatePassword) {\n  const bcrypt = require("bcrypt");\n  return await bcrypt.compare(candidatePassword, this.password);\n};\n\nuserSchema.methods.getPublicProfile = function() {\n  return {\n    name: this.name,\n    email: this.email\n    // password excluded\n  };\n};\n\n// Usage\nconst user = await User.findOne({ email: "test@test.com" });\nconst isMatch = await user.comparePassword("password123");\nconst profile = user.getPublicProfile();',
+            runnable: false
+          },
+          {
+            type: 'code',
+            title: 'Static Methods',
+            code: '// Static method (called on Model)\nuserSchema.statics.findByEmail = function(email) {\n  return this.findOne({ email: email.toLowerCase() });\n};\n\nuserSchema.statics.findActive = function() {\n  return this.find({ isActive: true });\n};\n\nuserSchema.statics.countAdmins = async function() {\n  return await this.countDocuments({ role: "admin" });\n};\n\n// Usage\nconst user = await User.findByEmail("test@test.com");\nconst activeUsers = await User.findActive();\nconst adminCount = await User.countAdmins();',
+            runnable: false
+          },
+          {
+            type: 'info',
+            title: 'Methods vs Statics',
+            text: 'Instance Methods:\n• Called on documents\n• Access with this\n• Example: user.comparePassword()\n\nStatic Methods:\n• Called on Model\n• Access with this (Model)\n• Example: User.findByEmail()\n\nUse instance methods for:\n• Document-specific operations\n• Accessing document properties\n\nUse static methods for:\n• Collection-level operations\n• Custom queries'
+          }
+        ],
+        quiz: {
+          question: 'What is the difference between instance and static methods?',
+          options: ['No difference', 'Instance on documents, static on Model', 'Instance is faster', 'Static is deprecated'],
+          correct: 1,
+          explanation: 'Instance methods are called on documents (e.g., user.method()), while static methods are called on the Model (e.g., User.method()).'
+        }
+      },
+      {
+        id: 'mongoose-indexes',
+        title: 'Indexes & Performance',
+        subtitle: 'Optimizing Queries',
+        icon: '⚡',
+        section: 'MongoDB & Mongoose',
+        content: [
+          {
+            type: 'explanation',
+            text: 'Indexes improve query performance by creating efficient lookup structures.'
+          },
+          {
+            type: 'code',
+            title: 'Creating Indexes',
+            code: 'const userSchema = new mongoose.Schema({\n  email: {\n    type: String,\n    unique: true, // Creates unique index\n    index: true   // Creates regular index\n  },\n  name: String,\n  age: Number,\n  city: String\n});\n\n// Single field index\nuserSchema.index({ name: 1 }); // 1 = ascending, -1 = descending\n\n// Compound index (multiple fields)\nuserSchema.index({ city: 1, age: -1 });\n\n// Text index (for text search)\nuserSchema.index({ name: "text", bio: "text" });\n\n// Sparse index (only docs with field)\nuserSchema.index({ phoneNumber: 1 }, { sparse: true });',
+            runnable: false
+          },
+          {
+            type: 'info',
+            title: 'Index Benefits & Trade-offs',
+            text: 'Benefits:\n✅ Faster queries (O(log n) vs O(n))\n✅ Efficient sorting\n✅ Unique constraints\n\nTrade-offs:\n❌ Slower writes (index must update)\n❌ More storage space\n❌ Memory overhead\n\nBest Practices:\n• Index frequently queried fields\n• Index fields used in sorting\n• Compound indexes for common queries\n• Limit to 64 indexes per collection'
+          }
+        ],
+        quiz: {
+          question: 'What is the main benefit of indexes?',
+          options: ['Slower queries', 'Faster queries by avoiding full collection scans', 'More storage', 'Better security'],
+          correct: 1,
+          explanation: 'Indexes dramatically speed up queries by allowing MongoDB to find documents without scanning the entire collection.'
+        }
+      },
+
+      // TOPICS 51-60: AUTHENTICATION & SECURITY
+      {
+        id: 'auth-basics',
+        title: 'Authentication vs Authorization',
+        subtitle: 'Security Fundamentals',
+        icon: '🔐',
+        section: 'Authentication & Security',
+        content: [
+          {
+            type: 'explanation',
+            text: 'Authentication verifies who you are. Authorization determines what you can do.'
+          },
+          {
+            type: 'info',
+            title: 'Key Concepts',
+            text: 'Authentication (Who are you?):\n• Login with credentials\n• Verifying identity\n• Examples: password, biometrics, tokens\n\nAuthorization (What can you do?):\n• Permission checks\n• Role-based access\n• Examples: admin vs user, resource ownership\n\nFlow:\n1. User authenticates (login)\n2. Server verifies credentials\n3. Server issues token/session\n4. User sends token with requests\n5. Server authorizes based on token'
+          },
+          {
+            type: 'warning',
+            title: 'Security Principles',
+            text: 'Never:\n❌ Store passwords in plain text\n❌ Send passwords in URLs\n❌ Trust client-side validation only\n❌ Expose sensitive data in tokens\n\nAlways:\n✅ Hash passwords (bcrypt)\n✅ Use HTTPS\n✅ Validate on server\n✅ Implement rate limiting\n✅ Use secure session storage'
+          }
+        ],
+        quiz: {
+          question: 'What is the difference between authentication and authorization?',
+          options: ['No difference', 'Authentication verifies identity, authorization checks permissions', 'Authorization is faster', 'Authentication is optional'],
+          correct: 1,
+          explanation: 'Authentication verifies WHO you are (login). Authorization determines WHAT you can do (permissions).'
+        }
+      },
+      {
+        id: 'password-hashing',
+        title: 'Password Hashing with Bcrypt',
+        subtitle: 'Secure Password Storage',
+        icon: '🔒',
+        section: 'Authentication & Security',
+        content: [
+          {
+            type: 'explanation',
+            text: 'Never store passwords in plain text! Use bcrypt to hash passwords with automatic salting.'
+          },
+          {
+            type: 'code',
+            title: 'Hashing Passwords',
+            code: 'const bcrypt = require("bcrypt");\n\n// Hash password on signup\nconst hashPassword = async (password) => {\n  const saltRounds = 10; // Higher = more secure but slower\n  const hashedPassword = await bcrypt.hash(password, saltRounds);\n  return hashedPassword;\n};\n\n// In signup route\napp.post("/signup", async (req, res) => {\n  const { email, password } = req.body;\n  \n  // Hash password\n  const hashedPassword = await hashPassword(password);\n  \n  // Store hashedPassword in database\n  const user = await User.create({\n    email,\n    password: hashedPassword // NOT plain password!\n  });\n  \n  res.status(201).json({ message: "User created" });\n});',
+            runnable: false
+          },
+          {
+            type: 'code',
+            title: 'Comparing Passwords',
+            code: '// Compare password on login\nconst comparePassword = async (plainPassword, hashedPassword) => {\n  const isMatch = await bcrypt.compare(plainPassword, hashedPassword);\n  return isMatch;\n};\n\n// In login route\napp.post("/login", async (req, res) => {\n  const { email, password } = req.body;\n  \n  // Find user\n  const user = await User.findOne({ email });\n  if (!user) {\n    return res.status(401).json({ error: "Invalid credentials" });\n  }\n  \n  // Compare passwords\n  const isMatch = await comparePassword(password, user.password);\n  if (!isMatch) {\n    return res.status(401).json({ error: "Invalid credentials" });\n  }\n  \n  res.json({ message: "Login successful" });\n});',
+            runnable: false
+          },
+          {
+            type: 'warning',
+            title: 'Password Security',
+            text: 'Best Practices:\n\n✅ Use bcrypt (not md5 or sha1)\n✅ Salt rounds: 10-12\n✅ Hash passwords before saving\n✅ Never log passwords\n✅ Use HTTPS\n\nPassword Requirements:\n• Minimum 8 characters\n• Mix of letters and numbers\n• Special characters\n• Not common passwords'
+          }
+        ],
+        quiz: {
+          question: 'Why use bcrypt instead of plain text or simple hashing?',
+          options: ['Bcrypt is faster', 'Bcrypt automatically salts and is designed to be slow', 'Bcrypt is easier', 'No difference'],
+          correct: 1,
+          explanation: 'Bcrypt automatically handles salting and is intentionally slow to resist brute-force attacks.'
+        }
+      },
+      {
+        id: 'jwt-tokens',
+        title: 'JWT (JSON Web Tokens)',
+        subtitle: 'Stateless Authentication',
+        icon: '🎫',
+        section: 'Authentication & Security',
+        content: [
+          {
+            type: 'explanation',
+            text: 'JWT is a compact, self-contained way to securely transmit information between parties as a JSON object.'
+          },
+          {
+            type: 'info',
+            title: 'JWT Structure',
+            text: 'JWT has 3 parts (separated by dots):\n\nheader.payload.signature\n\nHeader:\n• Algorithm (HS256)\n• Token type (JWT)\n\nPayload:\n• User data (userId, role)\n• Expiration time\n• Issued at time\n\nSignature:\n• Verifies token integrity\n• Created using secret key'
+          },
+          {
+            type: 'code',
+            title: 'Creating JWT',
+            code: 'const jwt = require("jsonwebtoken");\n\n// Create token on login\napp.post("/login", async (req, res) => {\n  const { email, password } = req.body;\n  \n  // Verify user (previous example)\n  const user = await User.findOne({ email });\n  const isMatch = await bcrypt.compare(password, user.password);\n  \n  if (!isMatch) {\n    return res.status(401).json({ error: "Invalid credentials" });\n  }\n  \n  // Create JWT\n  const token = jwt.sign(\n    { userId: user._id, role: user.role }, // Payload\n    process.env.JWT_SECRET, // Secret key\n    { expiresIn: "1h" } // Options\n  );\n  \n  res.json({ token });\n});',
+            runnable: false
+          },
+          {
+            type: 'code',
+            title: 'Verifying JWT',
+            code: '// Middleware to verify JWT\nconst authMiddleware = (req, res, next) => {\n  // Get token from header\n  const token = req.header("Authorization")?.replace("Bearer ", "");\n  \n  if (!token) {\n    return res.status(401).json({ error: "No token provided" });\n  }\n  \n  try {\n    // Verify token\n    const decoded = jwt.verify(token, process.env.JWT_SECRET);\n    req.user = decoded; // Add user info to request\n    next();\n  } catch (error) {\n    res.status(401).json({ error: "Invalid token" });\n  }\n};\n\n// Protected route\napp.get("/profile", authMiddleware, async (req, res) => {\n  const user = await User.findById(req.user.userId);\n  res.json(user);\n});',
+            runnable: false
+          },
+          {
+            type: 'warning',
+            title: 'JWT Security',
+            text: 'Important:\n\n✅ Store secret in environment variable\n✅ Use strong secret (256 bits)\n✅ Set expiration time\n✅ Send via Authorization header\n✅ Use HTTPS\n\n❌ Never store sensitive data in payload\n❌ Never share JWT secret\n❌ Never store JWT in localStorage (XSS risk)\n\nBest: Use httpOnly cookies'
+          }
+        ],
+        quiz: {
+          question: 'What is the main advantage of JWT?',
+          options: ['Faster than sessions', 'Stateless - no server-side storage needed', 'More secure than all methods', 'Easier to implement'],
+          correct: 1,
+          explanation: 'JWT is stateless, meaning the server doesn\'t need to store session data. All info is in the token.'
+        }
+      },
+      {
+        id: 'protecting-routes',
+        title: 'Protecting Routes',
+        subtitle: 'Authentication Middleware',
+        icon: '🛡️',
+        section: 'Authentication & Security',
+        content: [
+          {
+            type: 'explanation',
+            text: 'Use middleware to protect routes and check user authentication and authorization.'
+          },
+          {
+            type: 'code',
+            title: 'Authentication Middleware',
+            code: '// Middleware to check if user is authenticated\nconst isAuthenticated = (req, res, next) => {\n  const token = req.header("Authorization")?.replace("Bearer ", "");\n  \n  if (!token) {\n    return res.status(401).json({ error: "Access denied" });\n  }\n  \n  try {\n    const decoded = jwt.verify(token, process.env.JWT_SECRET);\n    req.user = decoded;\n    next();\n  } catch (error) {\n    res.status(401).json({ error: "Invalid token" });\n  }\n};\n\n// Use on protected routes\napp.get("/dashboard", isAuthenticated, (req, res) => {\n  res.json({ message: "Welcome to dashboard" });\n});',
+            runnable: false
+          },
+          {
+            type: 'code',
+            title: 'Role-Based Authorization',
+            code: '// Middleware to check user role\nconst isAdmin = (req, res, next) => {\n  if (req.user.role !== "admin") {\n    return res.status(403).json({ error: "Admin access required" });\n  }\n  next();\n};\n\n// Multiple middleware (chain)\napp.delete("/users/:id",\n  isAuthenticated,  // First: check if logged in\n  isAdmin,          // Then: check if admin\n  async (req, res) => {\n    await User.findByIdAndDelete(req.params.id);\n    res.json({ message: "User deleted" });\n  }\n);\n\n// Generic role checker\nconst hasRole = (...roles) => {\n  return (req, res, next) => {\n    if (!roles.includes(req.user.role)) {\n      return res.status(403).json({ error: "Insufficient permissions" });\n    }\n    next();\n  };\n};\n\n// Usage\napp.post("/articles", isAuthenticated, hasRole("admin", "editor"), (req, res) => {\n  // Only admins and editors can create articles\n});',
+            runnable: false
+          },
+          {
+            type: 'code',
+            title: 'Resource Ownership Check',
+            code: '// Check if user owns the resource\nconst isOwner = async (req, res, next) => {\n  try {\n    const post = await Post.findById(req.params.id);\n    \n    if (!post) {\n      return res.status(404).json({ error: "Post not found" });\n    }\n    \n    // Check if current user is the post author\n    if (post.author.toString() !== req.user.userId) {\n      return res.status(403).json({ error: "Not authorized" });\n    }\n    \n    req.post = post; // Attach post to request\n    next();\n  } catch (error) {\n    res.status(500).json({ error: "Server error" });\n  }\n};\n\n// Use ownership check\napp.put("/posts/:id", isAuthenticated, isOwner, async (req, res) => {\n  req.post.title = req.body.title;\n  await req.post.save();\n  res.json(req.post);\n});',
+            runnable: false
+          }
+        ],
+        quiz: {
+          question: 'What HTTP status code for unauthorized access?',
+          options: ['400 Bad Request', '401 Unauthorized (not authenticated)', '403 Forbidden (authenticated but not authorized)', 'Both 401 and 403 are correct depending on situation'],
+          correct: 3,
+          explanation: '401 = not authenticated (no valid token). 403 = authenticated but lacks permission (forbidden).'
+        }
+      },
+      {
+        id: 'sessions-cookies',
+        title: 'Sessions & Cookies',
+        subtitle: 'Stateful Authentication',
+        icon: '🍪',
+        section: 'Authentication & Security',
+        content: [
+          {
+            type: 'explanation',
+            text: 'Sessions store user state on the server. Cookies store session ID on the client.'
+          },
+          {
+            type: 'info',
+            title: 'Sessions vs JWT',
+            text: 'Sessions:\n✅ More secure (server-side)\n✅ Can be revoked immediately\n✅ Smaller cookie size\n❌ Requires server storage\n❌ Harder to scale\n\nJWT:\n✅ Stateless\n✅ Easy to scale\n✅ Cross-domain\n❌ Cannot revoke before expiration\n❌ Larger size'
+          },
+          {
+            type: 'code',
+            title: 'Setting Up Sessions',
+            code: 'const express = require("express");\nconst session = require("express-session");\nconst MongoStore = require("connect-mongo");\n\nconst app = express();\n\napp.use(session({\n  secret: process.env.SESSION_SECRET,\n  resave: false,\n  saveUninitialized: false,\n  store: MongoStore.create({\n    mongoUrl: process.env.DATABASE_URL\n  }),\n  cookie: {\n    maxAge: 1000 * 60 * 60 * 24, // 1 day\n    httpOnly: true, // Prevents client-side access\n    secure: process.env.NODE_ENV === "production", // HTTPS only in production\n    sameSite: "strict" // CSRF protection\n  }\n}));',
+            runnable: false
+          },
+          {
+            type: 'code',
+            title: 'Using Sessions',
+            code: '// Login route\napp.post("/login", async (req, res) => {\n  const { email, password } = req.body;\n  \n  const user = await User.findOne({ email });\n  const isMatch = await bcrypt.compare(password, user.password);\n  \n  if (!isMatch) {\n    return res.status(401).json({ error: "Invalid credentials" });\n  }\n  \n  // Store user in session\n  req.session.userId = user._id;\n  req.session.role = user.role;\n  \n  res.json({ message: "Logged in" });\n});\n\n// Logout route\napp.post("/logout", (req, res) => {\n  req.session.destroy((err) => {\n    if (err) {\n      return res.status(500).json({ error: "Logout failed" });\n    }\n    res.clearCookie("connect.sid");\n    res.json({ message: "Logged out" });\n  });\n});\n\n// Session middleware\nconst requireAuth = (req, res, next) => {\n  if (!req.session.userId) {\n    return res.status(401).json({ error: "Not authenticated" });\n  }\n  next();\n};\n\n// Protected route\napp.get("/dashboard", requireAuth, (req, res) => {\n  res.json({ userId: req.session.userId });\n});',
+            runnable: false
+          },
+          {
+            type: 'warning',
+            title: 'Cookie Security',
+            text: 'Cookie flags:\n\n✅ httpOnly: Prevents JavaScript access (XSS protection)\n✅ secure: HTTPS only\n✅ sameSite: CSRF protection\n   • strict: Best security\n   • lax: Balance\n   • none: Least secure\n\n✅ maxAge: Set expiration\n\nNever:\n❌ Store sensitive data in cookies\n❌ Use cookies without httpOnly\n❌ Skip secure flag in production'
+          }
+        ],
+        quiz: {
+          question: 'What does httpOnly cookie flag do?',
+          options: ['Makes cookie work on HTTP only', 'Prevents JavaScript from accessing cookie', 'Makes cookie faster', 'Encrypts cookie'],
+          correct: 1,
+          explanation: 'httpOnly prevents client-side JavaScript from accessing the cookie, protecting against XSS attacks.'
+        }
+      },
+      {
+        id: 'security-best-practices',
+        title: 'Security Best Practices',
+        subtitle: 'Comprehensive Security',
+        icon: '🔐',
+        section: 'Authentication & Security',
+        content: [
+          {
+            type: 'explanation',
+            text: 'Implement multiple layers of security to protect your application and users.'
+          },
+          {
+            type: 'info',
+            title: 'Security Checklist',
+            text: 'Authentication:\n✅ Hash passwords with bcrypt\n✅ Enforce strong password policy\n✅ Implement rate limiting\n✅ Use secure session storage\n✅ Set appropriate token expiration\n\nData Protection:\n✅ Validate all inputs\n✅ Sanitize user data\n✅ Use parameterized queries\n✅ Encrypt sensitive data\n✅ Use HTTPS everywhere\n\nHeaders:\n✅ Use helmet.js\n✅ Set CSP headers\n✅ Enable CORS properly\n✅ Set X-Frame-Options\n\nMonitoring:\n✅ Log security events\n✅ Monitor failed login attempts\n✅ Set up alerts\n✅ Regular security audits'
+          },
+          {
+            type: 'code',
+            title: 'Rate Limiting',
+            code: 'const rateLimit = require("express-rate-limit");\n\n// General rate limiter\nconst limiter = rateLimit({\n  windowMs: 15 * 60 * 1000, // 15 minutes\n  max: 100, // Max 100 requests per window\n  message: "Too many requests, please try again later"\n});\n\napp.use(limiter);\n\n// Stricter rate limit for login\nconst loginLimiter = rateLimit({\n  windowMs: 15 * 60 * 1000,\n  max: 5, // Max 5 login attempts\n  message: "Too many login attempts",\n  skipSuccessfulRequests: true\n});\n\napp.post("/login", loginLimiter, async (req, res) => {\n  // Login logic\n});',
+            runnable: false
+          },
+          {
+            type: 'code',
+            title: 'Security Headers with Helmet',
+            code: 'const helmet = require("helmet");\n\n// Use helmet for security headers\napp.use(helmet());\n\n// Custom configuration\napp.use(\n  helmet({\n    contentSecurityPolicy: {\n      directives: {\n        defaultSrc: ["\'"self"\'"],\n        styleSrc: ["\'"self"\'", "\'"unsafe-inline"\'"],\n        scriptSrc: ["\'"self"\'"],\n        imgSrc: ["\'"self"\'", "data:", "https:"],\n      },\n    },\n    hsts: {\n      maxAge: 31536000,\n      includeSubDomains: true,\n      preload: true\n    }\n  })\n);',
+            runnable: false
+          },
+          {
+            type: 'code',
+            title: 'Input Sanitization',
+            code: 'const mongoSanitize = require("express-mongo-sanitize");\nconst xss = require("xss-clean");\n\n// Prevent NoSQL injection\napp.use(mongoSanitize());\n\n// Prevent XSS attacks\napp.use(xss());\n\n// Validate with Joi\nconst Joi = require("joi");\n\nconst loginSchema = Joi.object({\n  email: Joi.string().email().required(),\n  password: Joi.string().min(8).required()\n});\n\napp.post("/login", (req, res) => {\n  const { error } = loginSchema.validate(req.body);\n  if (error) {\n    return res.status(400).json({ error: error.details[0].message });\n  }\n  // Proceed with login\n});',
+            runnable: false
+          },
+          {
+            type: 'warning',
+            title: 'Common Vulnerabilities',
+            text: 'Protect against:\n\n❌ SQL/NoSQL Injection\n   → Use parameterized queries, sanitize input\n\n❌ XSS (Cross-Site Scripting)\n   → Escape output, use CSP headers\n\n❌ CSRF (Cross-Site Request Forgery)\n   → Use CSRF tokens, sameSite cookies\n\n❌ Brute Force\n   → Rate limiting, account lockout\n\n❌ Insecure Dependencies\n   → Regular updates, npm audit'
+          }
+        ],
+        quiz: {
+          question: 'What is the purpose of rate limiting?',
+          options: ['Make app faster', 'Prevent brute force and DoS attacks', 'Reduce server cost', 'Improve SEO'],
+          correct: 1,
+          explanation: 'Rate limiting prevents brute force attacks and denial-of-service by limiting requests per time window.'
+        }
+      },
+      {
+        id: 'oauth-social',
+        title: 'OAuth & Social Login',
+        subtitle: 'Third-Party Authentication',
+        icon: '🔑',
+        section: 'Authentication & Security',
+        content: [
+          {
+            type: 'explanation',
+            text: 'OAuth allows users to login using third-party providers (Google, Facebook, GitHub) without sharing passwords.'
+          },
+          {
+            type: 'info',
+            title: 'OAuth 2.0 Flow',
+            text: '1. User clicks "Login with Google"\n2. Redirect to Google login\n3. User authorizes your app\n4. Google redirects back with code\n5. Exchange code for access token\n6. Use token to get user info\n7. Create/login user in your database\n\nBenefits:\n✅ Users don\'t create new password\n✅ Trusted provider handles security\n✅ Easy for users\n✅ Social data available'
+          },
+          {
+            type: 'code',
+            title: 'OAuth with Passport.js',
+            code: 'const passport = require("passport");\nconst GoogleStrategy = require("passport-google-oauth20").Strategy;\n\npassport.use(new GoogleStrategy({\n    clientID: process.env.GOOGLE_CLIENT_ID,\n    clientSecret: process.env.GOOGLE_CLIENT_SECRET,\n    callbackURL: "/auth/google/callback"\n  },\n  async (accessToken, refreshToken, profile, done) => {\n    // Find or create user\n    let user = await User.findOne({ googleId: profile.id });\n    \n    if (!user) {\n      user = await User.create({\n        googleId: profile.id,\n        email: profile.emails[0].value,\n        name: profile.displayName\n      });\n    }\n    \n    return done(null, user);\n  }\n));\n\n// Serialize user\npassport.serializeUser((user, done) => {\n  done(null, user.id);\n});\n\npassport.deserializeUser(async (id, done) => {\n  const user = await User.findById(id);\n  done(null, user);\n});',
+            runnable: false
+          },
+          {
+            type: 'code',
+            title: 'OAuth Routes',
+            code: 'app.use(passport.initialize());\napp.use(passport.session());\n\n// Initiate OAuth flow\napp.get("/auth/google",\n  passport.authenticate("google", {\n    scope: ["profile", "email"]\n  })\n);\n\n// OAuth callback\napp.get("/auth/google/callback",\n  passport.authenticate("google", {\n    failureRedirect: "/login"\n  }),\n  (req, res) => {\n    // Successful authentication\n    res.redirect("/dashboard");\n  }\n);\n\n// Logout\napp.get("/logout", (req, res) => {\n  req.logout((err) => {\n    if (err) return next(err);\n    res.redirect("/");\n  });\n});',
+            runnable: false
+          }
+        ],
+        quiz: {
+          question: 'What is the main advantage of OAuth?',
+          options: ['Faster login', 'Users don\'t need to create/remember another password', 'Cheaper to implement', 'Better SEO'],
+          correct: 1,
+          explanation: 'OAuth allows users to authenticate using existing accounts (Google, Facebook) without creating new passwords.'
+        }
+      },
+      {
+        id: 'refresh-tokens',
+        title: 'Refresh Tokens',
+        subtitle: 'Long-Lived Authentication',
+        icon: '🔄',
+        section: 'Authentication & Security',
+        content: [
+          {
+            type: 'explanation',
+            text: 'Refresh tokens allow obtaining new access tokens without re-authentication, balancing security and UX.'
+          },
+          {
+            type: 'info',
+            title: 'Access vs Refresh Tokens',
+            text: 'Access Token:\n• Short-lived (15 minutes - 1 hour)\n• Used for API requests\n• Sent with every request\n• If stolen, limited damage\n\nRefresh Token:\n• Long-lived (days/weeks)\n• Used to get new access token\n• Stored securely (httpOnly cookie)\n• Can be revoked\n\nFlow:\n1. Login → Get both tokens\n2. Use access token for requests\n3. Access token expires\n4. Use refresh token to get new access token\n5. Continue using app'
+          },
+          {
+            type: 'code',
+            title: 'Implementing Refresh Tokens',
+            code: 'const jwt = require("jsonwebtoken");\n\n// Login: Generate both tokens\napp.post("/login", async (req, res) => {\n  // Verify user...\n  \n  // Generate access token (short-lived)\n  const accessToken = jwt.sign(\n    { userId: user._id },\n    process.env.JWT_SECRET,\n    { expiresIn: "15m" }\n  );\n  \n  // Generate refresh token (long-lived)\n  const refreshToken = jwt.sign(\n    { userId: user._id },\n    process.env.REFRESH_TOKEN_SECRET,\n    { expiresIn: "7d" }\n  );\n  \n  // Store refresh token in database\n  user.refreshToken = refreshToken;\n  await user.save();\n  \n  // Send tokens\n  res.cookie("refreshToken", refreshToken, {\n    httpOnly: true,\n    secure: true,\n    sameSite: "strict",\n    maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days\n  });\n  \n  res.json({ accessToken });\n});',
+            runnable: false
+          },
+          {
+            type: 'code',
+            title: 'Refresh Token Endpoint',
+            code: '// Endpoint to refresh access token\napp.post("/refresh", async (req, res) => {\n  const refreshToken = req.cookies.refreshToken;\n  \n  if (!refreshToken) {\n    return res.status(401).json({ error: "Refresh token required" });\n  }\n  \n  try {\n    // Verify refresh token\n    const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);\n    \n    // Check if token exists in database\n    const user = await User.findOne({\n      _id: decoded.userId,\n      refreshToken: refreshToken\n    });\n    \n    if (!user) {\n      return res.status(403).json({ error: "Invalid refresh token" });\n    }\n    \n    // Generate new access token\n    const accessToken = jwt.sign(\n      { userId: user._id },\n      process.env.JWT_SECRET,\n      { expiresIn: "15m" }\n    );\n    \n    res.json({ accessToken });\n  } catch (error) {\n    res.status(403).json({ error: "Invalid refresh token" });\n  }\n});\n\n// Logout: Invalidate refresh token\napp.post("/logout", async (req, res) => {\n  const refreshToken = req.cookies.refreshToken;\n  \n  // Remove from database\n  await User.updateOne(\n    { refreshToken },\n    { $unset: { refreshToken: 1 } }\n  );\n  \n  res.clearCookie("refreshToken");\n  res.json({ message: "Logged out" });\n});',
+            runnable: false
+          }
+        ],
+        quiz: {
+          question: 'Why use short-lived access tokens with refresh tokens?',
+          options: ['Save bandwidth', 'Minimize damage if access token is stolen', 'Faster authentication', 'Easier to implement'],
+          correct: 1,
+          explanation: 'Short-lived access tokens limit the damage if stolen. Refresh tokens allow getting new access tokens without re-login.'
+        }
+      },
+      {
+        id: 'two-factor-auth',
+        title: 'Two-Factor Authentication (2FA)',
+        subtitle: 'Enhanced Security',
+        icon: '🔢',
+        section: 'Authentication & Security',
+        content: [
+          {
+            type: 'explanation',
+            text: '2FA adds an extra layer of security by requiring two forms of verification: something you know (password) and something you have (phone, authenticator app).'
+          },
+          {
+            type: 'info',
+            title: '2FA Methods',
+            text: 'SMS/Email:\n• Send code to phone/email\n• User enters code\n❌ Vulnerable to SIM swapping\n❌ Phishing risk\n\nAuthenticator App (TOTP):\n• Google Authenticator, Authy\n• Time-based one-time passwords\n✅ More secure\n✅ Works offline\n\nHardware Keys:\n• YubiKey, etc.\n• Physical device\n✅ Most secure\n❌ Can be lost'
+          },
+          {
+            type: 'code',
+            title: 'TOTP Implementation',
+            code: 'const speakeasy = require("speakeasy");\nconst QRCode = require("qrcode");\n\n// Enable 2FA: Generate secret\napp.post("/2fa/enable", isAuthenticated, async (req, res) => {\n  // Generate secret\n  const secret = speakeasy.generateSecret({\n    name: `MyApp (${req.user.email})`\n  });\n  \n  // Generate QR code\n  const qrCode = await QRCode.toDataURL(secret.otpauth_url);\n  \n  // Store secret temporarily (verify before saving permanently)\n  req.session.tempSecret = secret.base32;\n  \n  res.json({\n    secret: secret.base32,\n    qrCode: qrCode\n  });\n});\n\n// Verify and activate 2FA\napp.post("/2fa/verify", isAuthenticated, async (req, res) => {\n  const { token } = req.body;\n  const secret = req.session.tempSecret;\n  \n  // Verify token\n  const verified = speakeasy.totp.verify({\n    secret: secret,\n    encoding: "base32",\n    token: token\n  });\n  \n  if (!verified) {\n    return res.status(400).json({ error: "Invalid code" });\n  }\n  \n  // Save secret permanently\n  await User.findByIdAndUpdate(req.user.userId, {\n    twoFactorSecret: secret,\n    twoFactorEnabled: true\n  });\n  \n  delete req.session.tempSecret;\n  res.json({ message: "2FA enabled successfully" });\n});',
+            runnable: false
+          },
+          {
+            type: 'code',
+            title: '2FA Login Flow',
+            code: '// Step 1: Regular login\napp.post("/login", async (req, res) => {\n  const { email, password } = req.body;\n  \n  const user = await User.findOne({ email });\n  const isMatch = await bcrypt.compare(password, user.password);\n  \n  if (!isMatch) {\n    return res.status(401).json({ error: "Invalid credentials" });\n  }\n  \n  // Check if 2FA is enabled\n  if (user.twoFactorEnabled) {\n    // Store userId temporarily\n    req.session.pendingUserId = user._id;\n    return res.json({ requires2FA: true });\n  }\n  \n  // No 2FA, login normally\n  const token = generateToken(user);\n  res.json({ token });\n});\n\n// Step 2: Verify 2FA code\napp.post("/login/2fa", async (req, res) => {\n  const { token } = req.body;\n  const userId = req.session.pendingUserId;\n  \n  if (!userId) {\n    return res.status(400).json({ error: "No pending login" });\n  }\n  \n  const user = await User.findById(userId);\n  \n  // Verify 2FA token\n  const verified = speakeasy.totp.verify({\n    secret: user.twoFactorSecret,\n    encoding: "base32",\n    token: token,\n    window: 2 // Allow 2 time steps (±60 seconds)\n  });\n  \n  if (!verified) {\n    return res.status(400).json({ error: "Invalid 2FA code" });\n  }\n  \n  // Success! Generate JWT\n  delete req.session.pendingUserId;\n  const accessToken = generateToken(user);\n  res.json({ token: accessToken });\n});',
+            runnable: false
+          }
+        ],
+        quiz: {
+          question: 'What makes TOTP (authenticator app) more secure than SMS?',
+          options: ['It\'s faster', 'Not vulnerable to SIM swapping and phishing', 'Easier to use', 'Works on more devices'],
+          correct: 1,
+          explanation: 'TOTP is not vulnerable to SIM swapping attacks and reduces phishing risk since codes are generated locally.'
+        }
+      },
+      {
+        id: 'password-reset',
+        title: 'Password Reset Flow',
+        subtitle: 'Secure Password Recovery',
+        icon: '🔑',
+        section: 'Authentication & Security',
+        content: [
+          {
+            type: 'explanation',
+            text: 'Implement secure password reset to help users regain access without compromising security.'
+          },
+          {
+            type: 'info',
+            title: 'Secure Reset Flow',
+            text: '1. User requests password reset\n2. Generate unique token\n3. Send email with reset link\n4. User clicks link\n5. Verify token is valid and not expired\n6. Allow password change\n7. Invalidate token\n8. Send confirmation email\n\nSecurity measures:\n✅ Token expires (15-30 minutes)\n✅ One-time use tokens\n✅ Rate limit requests\n✅ Don\'t reveal if email exists\n✅ Invalidate all sessions on reset'
+          },
+          {
+            type: 'code',
+            title: 'Request Password Reset',
+            code: 'const crypto = require("crypto");\n\n// Request password reset\napp.post("/forgot-password", async (req, res) => {\n  const { email } = req.body;\n  \n  const user = await User.findOne({ email });\n  \n  // Don\'t reveal if user exists\n  if (!user) {\n    return res.json({ message: "If email exists, reset link sent" });\n  }\n  \n  // Generate reset token\n  const resetToken = crypto.randomBytes(32).toString("hex");\n  \n  // Hash token before storing\n  const hashedToken = crypto\n    .createHash("sha256")\n    .update(resetToken)\n    .digest("hex");\n  \n  // Save hashed token and expiry\n  user.resetPasswordToken = hashedToken;\n  user.resetPasswordExpires = Date.now() + 30 * 60 * 1000; // 30 minutes\n  await user.save();\n  \n  // Send email with reset link\n  const resetUrl = `${req.protocol}://${req.get("host")}/reset-password/${resetToken}`;\n  \n  await sendEmail({\n    to: user.email,\n    subject: "Password Reset Request",\n    text: `Click this link to reset your password: ${resetUrl}\nLink expires in 30 minutes.`\n  });\n  \n  res.json({ message: "If email exists, reset link sent" });\n});',
+            runnable: false
+          },
+          {
+            type: 'code',
+            title: 'Reset Password',
+            code: '// Reset password with token\napp.post("/reset-password/:token", async (req, res) => {\n  const { token } = req.params;\n  const { password } = req.body;\n  \n  // Hash the token from URL\n  const hashedToken = crypto\n    .createHash("sha256")\n    .update(token)\n    .digest("hex");\n  \n  // Find user with valid token\n  const user = await User.findOne({\n    resetPasswordToken: hashedToken,\n    resetPasswordExpires: { $gt: Date.now() }\n  });\n  \n  if (!user) {\n    return res.status(400).json({ error: "Invalid or expired token" });\n  }\n  \n  // Validate new password\n  if (password.length < 8) {\n    return res.status(400).json({ error: "Password too short" });\n  }\n  \n  // Hash and save new password\n  user.password = await bcrypt.hash(password, 10);\n  \n  // Clear reset token fields\n  user.resetPasswordToken = undefined;\n  user.resetPasswordExpires = undefined;\n  \n  await user.save();\n  \n  // Invalidate all existing sessions/tokens\n  await Session.deleteMany({ userId: user._id });\n  \n  // Send confirmation email\n  await sendEmail({\n    to: user.email,\n    subject: "Password Reset Successful",\n    text: "Your password has been changed successfully."\n  });\n  \n  res.json({ message: "Password reset successful" });\n});',
+            runnable: false
+          }
+        ],
+        quiz: {
+          question: 'Why hash the reset token before storing in database?',
+          options: ['Faster lookup', 'If database is compromised, attacker can\'t use tokens', 'Uses less space', 'Required by MongoDB'],
+          correct: 1,
+          explanation: 'Hashing tokens protects users if the database is compromised. Attacker would need the original token to reset passwords.'
+        }
+      }
+    ];
+
+    function App() {
+      const [currentTopicIndex, setCurrentTopicIndex] = useState(0);
+      const [completedTopics, setCompletedTopics] = useState({});
+      const [selectedAnswer, setSelectedAnswer] = useState(null);
+      const [showFeedback, setShowFeedback] = useState(false);
+      const [codeOutputs, setCodeOutputs] = useState({});
+
+      const currentTopic = courseData[currentTopicIndex];
+      const progress = (Object.keys(completedTopics).length / courseData.length) * 100;
+
+      const sections = {};
+      courseData.forEach((topic, index) => {
+        if (!sections[topic.section]) {
+          sections[topic.section] = [];
+        }
+        sections[topic.section].push({ ...topic, index });
+      });
+
+      const runCode = (code, index) => {
+        try {
+          const logs = [];
+          const originalLog = console.log;
+          console.log = (...args) => {
+            logs.push(args.map(arg => 
+              typeof arg === 'object' ? JSON.stringify(arg, null, 2) : String(arg)
+            ).join(' '));
+          };
+          eval(code);
+          console.log = originalLog;
+          setCodeOutputs(prev => ({ ...prev, [index]: logs.join('\n') }));
+        } catch (error) {
+          setCodeOutputs(prev => ({ ...prev, [index]: 'Error: ' + error.message }));
+        }
+      };
+
+      const checkAnswer = () => {
+        if (selectedAnswer === currentTopic.quiz.correct) {
+          setCompletedTopics(prev => ({ ...prev, [currentTopic.id]: true }));
+        }
+        setShowFeedback(true);
+      };
+
+      const nextTopic = () => {
+        if (currentTopicIndex < courseData.length - 1) {
+          setCurrentTopicIndex(currentTopicIndex + 1);
+          setSelectedAnswer(null);
+          setShowFeedback(false);
+          setCodeOutputs({});
+          window.scrollTo(0, 0);
+        }
+      };
+
+      const prevTopic = () => {
+        if (currentTopicIndex > 0) {
+          setCurrentTopicIndex(currentTopicIndex - 1);
+          setSelectedAnswer(null);
+          setShowFeedback(false);
+          setCodeOutputs({});
+          window.scrollTo(0, 0);
+        }
+      };
+
+      return (
+        <div className="container">
+          <div className="sidebar">
+            <div className="logo">Full Stack Mastery</div>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
+              Complete Course: JavaScript to Production
+            </p>
+            
+            <div className="progress-bar">
+              <div className="progress-fill" style={{ width: `${progress}%` }}></div>
+            </div>
+            <p style={{ textAlign: 'center', fontSize: '0.9rem', marginTop: '0.5rem' }}>
+              {Math.round(progress)}% Complete
+            </p>
+
+            {Object.entries(sections).map(([sectionName, topics]) => (
+              <div key={sectionName} className="section-group">
+                <div className="section-title">
+                  {sectionName} ({topics.length})
+                </div>
+                <div className="topic-list">
+                  {topics.map((topic) => (
+                    <div
+                      key={topic.id}
+                      className={`topic-item ${
+                        topic.index === currentTopicIndex ? 'active' : ''
+                      } ${completedTopics[topic.id] ? 'completed' : ''}`}
+                      onClick={() => {
+                        setCurrentTopicIndex(topic.index);
+                        setSelectedAnswer(null);
+                        setShowFeedback(false);
+                        setCodeOutputs({});
+                      }}
+                    >
+                      <span>
+                        {topic.icon} {topic.title}
+                      </span>
+                      {completedTopics[topic.id] && (
+                        <span className="checkmark">✓</span>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="main-content">
+            <div className="topic-header">
+              <h1 className="topic-title">
+                {currentTopic.icon} {currentTopic.title}
+              </h1>
+              <p className="topic-subtitle">{currentTopic.subtitle}</p>
+            </div>
+
+            {currentTopic.content.map((section, index) => (
+              <div key={index} className="content-section">
+                {section.type === 'explanation' && (
+                  <div className="explanation">{section.text}</div>
+                )}
+                
+                {section.type === 'info' && (
+                  <div className="info-box">
+                    <h4>{section.title}</h4>
+                    <pre style={{ whiteSpace: 'pre-wrap', lineHeight: '1.6' }}>
+                      {section.text}
+                    </pre>
+                  </div>
+                )}
+                
+                {section.type === 'warning' && (
+                  <div className="warning-box">
+                    <h4>{section.title}</h4>
+                    <pre style={{ whiteSpace: 'pre-wrap', lineHeight: '1.6' }}>
+                      {section.text}
+                    </pre>
+                  </div>
+                )}
+                
+                {section.type === 'code' && (
+                  <div className="code-block">
+                    {section.title && (
+                      <div className="code-header">
+                        <span className="code-title">{section.title}</span>
+                        <div className="code-buttons">
+                          {section.runnable && (
+                            <button
+                              className="code-button"
+                              onClick={() => runCode(section.code, index)}
+                            >
+                              ▶ Run
+                            </button>
+                          )}
+                          <button
+                            className="code-button"
+                            onClick={() => navigator.clipboard.writeText(section.code)}
+                          >
+                            📋 Copy
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                    <pre>{section.code}</pre>
+                    {codeOutputs[index] && (
+                      <div className="output-container">
+                        <div className="output-header">Output:</div>
+                        <div className="output-content">{codeOutputs[index]}</div>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            ))}
+
+            {currentTopic.quiz && (
+              <div className="quiz-container">
+                <h3 className="quiz-header">Test Your Knowledge</h3>
+                <p className="quiz-question">{currentTopic.quiz.question}</p>
+                <div>
+                  {currentTopic.quiz.options.map((option, index) => (
+                    <div
+                      key={index}
+                      className={`quiz-option ${
+                        selectedAnswer === index && !showFeedback ? 'selected' : ''
+                      } ${
+                        showFeedback && index === currentTopic.quiz.correct ? 'correct' : ''
+                      } ${
+                        showFeedback && selectedAnswer === index && index !== currentTopic.quiz.correct ? 'incorrect' : ''
+                      }`}
+                      onClick={() => !showFeedback && setSelectedAnswer(index)}
+                    >
+                      {option}
+                    </div>
+                  ))}
+                </div>
+                {!showFeedback && (
+                  <button
+                    onClick={checkAnswer}
+                    disabled={selectedAnswer === null}
+                    style={{ marginTop: '1.5rem' }}
+                  >
+                    Check Answer
+                  </button>
+                )}
+                {showFeedback && (
+                  <div
+                    className={`quiz-feedback ${
+                      selectedAnswer === currentTopic.quiz.correct ? 'correct' : 'incorrect'
+                    }`}
+                  >
+                    <strong>
+                      {selectedAnswer === currentTopic.quiz.correct ? '✓ Correct!' : '✗ Incorrect'}
+                    </strong>
+                    <p style={{ marginTop: '0.5rem' }}>{currentTopic.quiz.explanation}</p>
+                  </div>
+                )}
+              </div>
+            )}
+
+            <div className="nav-buttons">
+              <button onClick={prevTopic} disabled={currentTopicIndex === 0}>
+                ← Previous
+              </button>
+              <button onClick={nextTopic} disabled={currentTopicIndex === courseData.length - 1}>
+                Next →
+              </button>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    ReactDOM.render(<App />, document.getElementById('root'));
+    setTimeout(() => lucide.createIcons(), 100);
+  </script>
+</body>
+</html>

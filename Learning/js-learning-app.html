@@ -1,0 +1,2218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Advanced JS Learning Platform</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Mono:wght@400;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/lucide-static@0.263.1/font/lucide.min.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg-primary: #0a0e27;
+      --bg-secondary: #131729;
+      --bg-tertiary: #1a1f3a;
+      --accent-cyan: #00d9ff;
+      --accent-pink: #ff0080;
+      --accent-yellow: #ffeb3b;
+      --accent-green: #00ff88;
+      --text-primary: #e8eaf6;
+      --text-secondary: #9fa8da;
+      --text-muted: #5c6bc0;
+      --border: #283593;
+      --code-bg: #0d1117;
+      --success: #00ff88;
+      --warning: #ffeb3b;
+      --error: #ff1744;
+    }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      overflow-x: hidden;
+    }
+
+    .app-container {
+      display: flex;
+      height: 100vh;
+      position: relative;
+    }
+
+    /* Animated Background */
+    .bg-animation {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.3;
+    }
+
+    .bg-grid {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 50px 50px;
+      animation: gridMove 20s linear infinite;
+    }
+
+    @keyframes gridMove {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(50px, 50px); }
+    }
+
+    .bg-gradient {
+      position: absolute;
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      filter: blur(120px);
+      opacity: 0.4;
+      animation: float 15s ease-in-out infinite;
+    }
+
+    .bg-gradient-1 {
+      background: var(--accent-cyan);
+      top: 10%;
+      left: 20%;
+    }
+
+    .bg-gradient-2 {
+      background: var(--accent-pink);
+      bottom: 20%;
+      right: 10%;
+      animation-delay: -5s;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      33% { transform: translate(50px, -50px) scale(1.1); }
+      66% { transform: translate(-30px, 30px) scale(0.9); }
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 320px;
+      background: var(--bg-secondary);
+      border-right: 2px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      z-index: 10;
+      box-shadow: 4px 0 20px rgba(0, 0, 0, 0.5);
+    }
+
+    .sidebar-header {
+      padding: 30px 20px;
+      border-bottom: 2px solid var(--border);
+      background: linear-gradient(135deg, var(--bg-tertiary), var(--bg-secondary));
+    }
+
+    .logo {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 24px;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-pink));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 10px;
+      letter-spacing: -1px;
+    }
+
+    .progress-container {
+      margin-top: 20px;
+    }
+
+    .progress-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .progress-bar {
+      height: 8px;
+      background: var(--bg-tertiary);
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent-cyan), var(--accent-pink));
+      transition: width 0.5s ease;
+      box-shadow: 0 0 10px var(--accent-cyan);
+    }
+
+    /* Topic List */
+    .topics-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 10px;
+    }
+
+    .topic-item {
+      padding: 14px 16px;
+      margin: 6px 0;
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 14px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .topic-item::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 100%;
+      width: 3px;
+      background: var(--accent-cyan);
+      transform: scaleY(0);
+      transition: transform 0.3s ease;
+    }
+
+    .topic-item:hover {
+      background: var(--bg-primary);
+      border-color: var(--accent-cyan);
+      transform: translateX(4px);
+    }
+
+    .topic-item:hover::before {
+      transform: scaleY(1);
+    }
+
+    .topic-item.active {
+      background: linear-gradient(135deg, rgba(0, 217, 255, 0.1), rgba(255, 0, 128, 0.1));
+      border-color: var(--accent-cyan);
+      box-shadow: 0 0 20px rgba(0, 217, 255, 0.2);
+    }
+
+    .topic-item.active::before {
+      transform: scaleY(1);
+    }
+
+    .topic-item.completed {
+      border-color: var(--success);
+    }
+
+    .topic-icon {
+      font-size: 18px;
+      color: var(--accent-cyan);
+    }
+
+    .topic-item.completed .topic-icon {
+      color: var(--success);
+    }
+
+    .topic-name {
+      flex: 1;
+      font-weight: 500;
+    }
+
+    .check-icon {
+      color: var(--success);
+      font-size: 16px;
+    }
+
+    /* Main Content */
+    .main-content {
+      flex: 1;
+      overflow-y: auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .content-wrapper {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px;
+    }
+
+    .topic-header {
+      margin-bottom: 40px;
+      animation: slideDown 0.5s ease;
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .topic-title {
+      font-size: 48px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-pink));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: -2px;
+    }
+
+    .topic-subtitle {
+      font-size: 18px;
+      color: var(--text-secondary);
+      font-weight: 300;
+    }
+
+    /* Content Sections */
+    .section {
+      margin-bottom: 50px;
+      animation: fadeIn 0.6s ease;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .section-title {
+      font-size: 28px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      color: var(--accent-yellow);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .section-title i {
+      font-size: 24px;
+    }
+
+    .section-content {
+      font-size: 16px;
+      line-height: 1.8;
+      color: var(--text-secondary);
+      margin-bottom: 20px;
+    }
+
+    /* Code Block */
+    .code-block {
+      background: var(--code-bg);
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      padding: 0;
+      margin: 20px 0;
+      overflow: hidden;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+    }
+
+    .code-header {
+      background: var(--bg-tertiary);
+      padding: 12px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .code-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .run-button, .copy-button {
+      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-pink));
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .run-button:hover, .copy-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 217, 255, 0.4);
+    }
+
+    .code-content {
+      padding: 20px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px;
+      line-height: 1.6;
+      overflow-x: auto;
+      color: var(--text-primary);
+    }
+
+    .code-content pre {
+      margin: 0;
+    }
+
+    /* Output */
+    .output-container {
+      background: var(--bg-tertiary);
+      border: 2px solid var(--success);
+      border-radius: 12px;
+      padding: 20px;
+      margin-top: 20px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px;
+      animation: slideUp 0.3s ease;
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .output-header {
+      color: var(--success);
+      margin-bottom: 10px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .output-content {
+      color: var(--text-primary);
+      white-space: pre-wrap;
+    }
+
+    /* Interactive Playground */
+    .playground {
+      background: var(--bg-tertiary);
+      border: 2px solid var(--accent-pink);
+      border-radius: 12px;
+      padding: 20px;
+      margin: 30px 0;
+    }
+
+    .playground-header {
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--accent-pink);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .playground-editor {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px;
+      color: var(--text-primary);
+      min-height: 150px;
+      width: 100%;
+      resize: vertical;
+      outline: none;
+    }
+
+    /* Quiz Section */
+    .quiz-container {
+      background: linear-gradient(135deg, rgba(0, 217, 255, 0.05), rgba(255, 0, 128, 0.05));
+      border: 2px solid var(--accent-yellow);
+      border-radius: 12px;
+      padding: 30px;
+      margin: 40px 0;
+    }
+
+    .quiz-header {
+      font-size: 24px;
+      font-weight: 600;
+      color: var(--accent-yellow);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .quiz-question {
+      font-size: 18px;
+      margin-bottom: 20px;
+      color: var(--text-primary);
+      font-weight: 500;
+    }
+
+    .quiz-options {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .quiz-option {
+      background: var(--bg-tertiary);
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      padding: 16px 20px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 16px;
+    }
+
+    .quiz-option:hover {
+      background: var(--bg-secondary);
+      border-color: var(--accent-cyan);
+      transform: translateX(8px);
+    }
+
+    .quiz-option.selected {
+      border-color: var(--accent-cyan);
+      background: rgba(0, 217, 255, 0.1);
+    }
+
+    .quiz-option.correct {
+      border-color: var(--success);
+      background: rgba(0, 255, 136, 0.1);
+    }
+
+    .quiz-option.incorrect {
+      border-color: var(--error);
+      background: rgba(255, 23, 68, 0.1);
+    }
+
+    .quiz-feedback {
+      margin-top: 20px;
+      padding: 16px;
+      border-radius: 8px;
+      font-size: 16px;
+      animation: slideUp 0.3s ease;
+    }
+
+    .quiz-feedback.correct {
+      background: rgba(0, 255, 136, 0.1);
+      border: 2px solid var(--success);
+      color: var(--success);
+    }
+
+    .quiz-feedback.incorrect {
+      background: rgba(255, 23, 68, 0.1);
+      border: 2px solid var(--error);
+      color: var(--error);
+    }
+
+    .quiz-buttons {
+      display: flex;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .quiz-button {
+      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-pink));
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .quiz-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 217, 255, 0.4);
+    }
+
+    .quiz-button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* Navigation Buttons */
+    .nav-buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 60px;
+      padding-top: 40px;
+      border-top: 2px solid var(--border);
+    }
+
+    .nav-button {
+      background: var(--bg-tertiary);
+      border: 2px solid var(--border);
+      color: var(--text-primary);
+      padding: 14px 28px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .nav-button:hover {
+      background: var(--bg-secondary);
+      border-color: var(--accent-cyan);
+      transform: scale(1.05);
+    }
+
+    .nav-button:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--bg-secondary);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--accent-cyan);
+      border-radius: 5px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--accent-pink);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .sidebar {
+        position: fixed;
+        left: -320px;
+        transition: left 0.3s ease;
+        z-index: 100;
+      }
+
+      .sidebar.open {
+        left: 0;
+      }
+
+      .content-wrapper {
+        padding: 20px;
+      }
+
+      .topic-title {
+        font-size: 32px;
+      }
+    }
+
+    /* Syntax Highlighting */
+    .keyword { color: #ff79c6; }
+    .string { color: #50fa7b; }
+    .function { color: #8be9fd; }
+    .comment { color: #6272a4; }
+    .number { color: #bd93f9; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <script type="text/babel">
+    const { useState, useEffect } = React;
+
+    // Course Data
+    const courseData = [
+      {
+        id: 'object-literals',
+        title: 'Object Literals',
+        subtitle: 'Understanding JavaScript Objects',
+        icon: '📦',
+        content: [
+          {
+            type: 'explanation',
+            text: 'Object literals are the simplest way to create objects in JavaScript. They use curly braces {} to define properties and methods.'
+          },
+          {
+            type: 'code',
+            title: 'Basic Object',
+            code: `let circle = {
+  radius: 1,
+  border: 2
+};
+
+// Destructuring
+const { radius, border } = circle;
+console.log(radius); // 1
+console.log(border); // 2`,
+            runnable: true
+          },
+          {
+            type: 'code',
+            title: 'Nested Objects',
+            code: `let circle = {
+  radius: 1,
+  border: 2,
+  location: {
+    x: 45,
+    y: 35
+  }
+};
+
+console.log(circle.location.x); // 45`,
+            runnable: true
+          },
+          {
+            type: 'code',
+            title: 'Methods in Objects',
+            code: `let circle = {
+  radius: 1,
+  draw: function() {
+    console.log('Drawing circle with radius: ' + this.radius);
+  }
+};
+
+circle.draw();`,
+            runnable: true
+          }
+        ],
+        quiz: {
+          question: 'What is destructuring used for?',
+          options: [
+            'To delete properties from objects',
+            'To extract values from objects into variables',
+            'To merge two objects together',
+            'To convert objects to arrays'
+          ],
+          correct: 1,
+          explanation: 'Destructuring allows you to extract properties from objects and bind them to variables in a single statement.'
+        }
+      },
+      {
+        id: 'factory-functions',
+        title: 'Factory Functions',
+        subtitle: 'Creating Objects with Functions',
+        icon: '🏭',
+        content: [
+          {
+            type: 'explanation',
+            text: 'Factory functions are regular functions that return new objects. They provide a way to create multiple instances of similar objects without using constructors.'
+          },
+          {
+            type: 'code',
+            title: 'Factory Function Example',
+            code: `function createCircle(radius, border) {
+  return {
+    radius: radius,
+    border: border,
+    getArea: function() {
+      return Math.PI * this.radius * this.radius;
+    }
+  };
+}
+
+// Usage
+let myCircle = createCircle(5, 2);
+console.log('Radius:', myCircle.radius);
+console.log('Border:', myCircle.border);
+console.log('Area:', myCircle.getArea().toFixed(2));`,
+            runnable: true
+          },
+          {
+            type: 'code',
+            title: 'ES6 Shorthand',
+            code: `function createCircle(radius, border) {
+  return {
+    radius,  // shorthand for radius: radius
+    border,
+    getArea() {  // shorthand method syntax
+      return Math.PI * this.radius * this.radius;
+    }
+  };
+}
+
+let circle = createCircle(3, 1);
+console.log(circle.getArea().toFixed(2));`,
+            runnable: true
+          }
+        ],
+        quiz: {
+          question: 'What do factory functions return?',
+          options: [
+            'A class definition',
+            'A new object',
+            'A constructor',
+            'A prototype'
+          ],
+          correct: 1,
+          explanation: 'Factory functions are regular functions that return new objects when called.'
+        }
+      },
+      {
+        id: 'constructor-functions',
+        title: 'Constructor Functions',
+        subtitle: 'Object Creation with new keyword',
+        icon: '🏗️',
+        content: [
+          {
+            type: 'explanation',
+            text: 'Constructor functions use the "new" keyword to create objects. They use "this" to set properties and are conventionally named with a capital letter.'
+          },
+          {
+            type: 'code',
+            title: 'Constructor Function',
+            code: `function Circle(radius) {
+  this.radius = radius;
+  this.draw = function() {
+    console.log("Drawing circle: r=" + this.radius);
+  };
+}
+
+const c = new Circle(5);
+c.draw();
+console.log('Radius:', c.radius);`,
+            runnable: true
+          },
+          {
+            type: 'code',
+            title: 'What "new" does',
+            code: `// When you use "new":
+// 1. Creates empty object {}
+// 2. Sets "this" to that object
+// 3. Returns "this" (the new object)
+
+function Person(name) {
+  this.name = name;
+  this.greet = function() {
+    console.log('Hello, I am ' + this.name);
+  };
+}
+
+const person1 = new Person('Alice');
+const person2 = new Person('Bob');
+person1.greet();
+person2.greet();`,
+            runnable: true
+          }
+        ],
+        quiz: {
+          question: 'What does the "new" keyword do?',
+          options: [
+            'Creates a new variable',
+            'Creates a new object and sets "this" to it',
+            'Creates a new function',
+            'Creates a new array'
+          ],
+          correct: 1,
+          explanation: 'The "new" keyword creates a new empty object, sets "this" to that object, and returns it from the constructor.'
+        }
+      },
+      {
+        id: 'this-keyword',
+        title: 'The "this" Keyword',
+        subtitle: 'Context and Binding',
+        icon: '👉',
+        content: [
+          {
+            type: 'explanation',
+            text: '"this" refers to the object that is executing the current function. Its value depends on how the function is called.'
+          },
+          {
+            type: 'code',
+            title: 'this in Methods',
+            code: `const person = {
+  name: 'Alice',
+  greet: function() {
+    console.log('Hello, I am ' + this.name);
+  }
+};
+
+person.greet(); // "this" refers to person`,
+            runnable: true
+          },
+          {
+            type: 'code',
+            title: 'this in Regular Functions',
+            code: `function showThis() {
+  console.log(this); // undefined in strict mode
+}
+
+showThis();
+
+// In constructor
+function Person(name) {
+  this.name = name;
+  console.log('this refers to new object:', this);
+}
+
+new Person('Bob');`,
+            runnable: true
+          }
+        ],
+        quiz: {
+          question: 'What does "this" refer to in a method?',
+          options: [
+            'The global object',
+            'The function itself',
+            'The object calling the method',
+            'undefined'
+          ],
+          correct: 2,
+          explanation: 'In a method, "this" refers to the object that is calling the method.'
+        }
+      },
+      {
+        id: 'value-reference',
+        title: 'Value vs Reference Types',
+        subtitle: 'Primitives and Objects',
+        icon: '🔄',
+        content: [
+          {
+            type: 'explanation',
+            text: 'Primitives (numbers, strings, booleans) are copied by value. Objects (objects, arrays, functions) are copied by reference.'
+          },
+          {
+            type: 'code',
+            title: 'Primitives (Value Types)',
+            code: `let x = 10;
+let y = x;  // Copy the VALUE
+x = 20;
+
+console.log('x:', x);  // 20
+console.log('y:', y);  // 10 (unchanged)`,
+            runnable: true
+          },
+          {
+            type: 'code',
+            title: 'Objects (Reference Types)',
+            code: `let x = { value: 10 };
+let y = x;  // Copy the REFERENCE (memory address)
+x.value = 20;
+
+console.log('x.value:', x.value);  // 20
+console.log('y.value:', y.value);  // 20 (changed!)`,
+            runnable: true
+          },
+          {
+            type: 'code',
+            title: 'Functions with Primitives vs Objects',
+            code: `// Primitive
+let num = 10;
+function increase(n) {
+  n++;
+}
+increase(num);
+console.log('num:', num);  // 10 (unchanged)
+
+// Object
+let obj = { value: 10 };
+function increaseObj(o) {
+  o.value++;
+}
+increaseObj(obj);
+console.log('obj.value:', obj.value);  // 11 (changed!)`,
+            runnable: true
+          }
+        ],
+        quiz: {
+          question: 'What happens when you assign one object to another?',
+          options: [
+            'A complete copy is created',
+            'Only the reference (memory address) is copied',
+            'The original object is deleted',
+            'An error occurs'
+          ],
+          correct: 1,
+          explanation: 'When you assign one object to another, only the reference (memory address) is copied, not the actual object data.'
+        }
+      },
+      {
+        id: 'private-members',
+        title: 'Private Properties',
+        subtitle: 'Encapsulation with Closures',
+        icon: '🔒',
+        content: [
+          {
+            type: 'explanation',
+            text: 'Private properties are hidden from outside access. In factory functions, we can use closures to create private variables.'
+          },
+          {
+            type: 'code',
+            title: 'Private Variables',
+            code: `function createCircle(radius) {
+  // Private variable (local to this function)
+  let privateRadius = radius;
+  
+  // Public methods with access to private variable
+  return {
+    getRadius: function() {
+      return privateRadius;
+    },
+    setRadius: function(newRadius) {
+      if (newRadius > 0) {
+        privateRadius = newRadius;
+      }
+    },
+    getArea: function() {
+      return Math.PI * privateRadius * privateRadius;
+    }
+  };
+}
+
+let circle = createCircle(5);
+console.log('Radius:', circle.getRadius());
+console.log('Area:', circle.getArea().toFixed(2));
+// console.log(circle.privateRadius); // undefined - can't access!
+circle.setRadius(10);
+console.log('New radius:', circle.getRadius());`,
+            runnable: true
+          }
+        ],
+        quiz: {
+          question: 'How do closures help create private properties?',
+          options: [
+            'By deleting properties after use',
+            'By creating variables in function scope that remain accessible to returned methods',
+            'By encrypting the data',
+            'By using the private keyword'
+          ],
+          correct: 1,
+          explanation: 'Closures allow inner functions to access variables from their outer function scope, even after the outer function has returned.'
+        }
+      },
+      {
+        id: 'prototypes',
+        title: 'Prototypical Inheritance',
+        subtitle: 'Understanding Prototypes',
+        icon: '🧬',
+        content: [
+          {
+            type: 'explanation',
+            text: 'Every object in JavaScript has a prototype - a parent object from which it inherits properties and methods.'
+          },
+          {
+            type: 'code',
+            title: 'Prototype Basics',
+            code: `// Every object has a prototype
+let obj = {};
+console.log('Prototype:', Object.getPrototypeOf(obj));
+
+// All objects with same constructor share prototype
+let x = {};
+let y = {};
+console.log('Same prototype?', 
+  Object.getPrototypeOf(x) === Object.getPrototypeOf(y));`,
+            runnable: true
+          },
+          {
+            type: 'code',
+            title: 'Adding Methods to Prototype',
+            code: `function Circle(radius) {
+  this.radius = radius;
+}
+
+// Add method to prototype (shared by all instances)
+Circle.prototype.draw = function() {
+  console.log('Drawing circle with radius: ' + this.radius);
+};
+
+Circle.prototype.getArea = function() {
+  return Math.PI * this.radius * this.radius;
+};
+
+let c1 = new Circle(5);
+let c2 = new Circle(10);
+
+c1.draw();
+c2.draw();
+console.log('Area of c1:', c1.getArea().toFixed(2));`,
+            runnable: true
+          },
+          {
+            type: 'code',
+            title: 'Prototypal Inheritance',
+            code: `function Shape(color) {
+  this.color = color;
+}
+
+Shape.prototype.draw = function() {
+  console.log('Drawing a shape with color: ' + this.color);
+};
+
+function Circle(radius, color) {
+  Shape.call(this, color);  // Call parent constructor
+  this.radius = radius;
+}
+
+// Set up inheritance
+Circle.prototype = Object.create(Shape.prototype);
+Circle.prototype.constructor = Circle;
+
+// Override method
+Circle.prototype.draw = function() {
+  Shape.prototype.draw.call(this);  // Call parent method
+  console.log('It is a circle with radius: ' + this.radius);
+};
+
+let circle = new Circle(5, 'red');
+circle.draw();`,
+            runnable: true
+          }
+        ],
+        quiz: {
+          question: 'Why should you add methods to the prototype?',
+          options: [
+            'To make them private',
+            'To save memory - one copy shared by all instances',
+            'To make them run faster',
+            'To make them accessible from anywhere'
+          ],
+          correct: 1,
+          explanation: 'Methods on the prototype are shared by all instances, saving memory. If methods are in the constructor, each instance gets its own copy.'
+        }
+      },
+      {
+        id: 'es6-classes',
+        title: 'ES6 Classes',
+        subtitle: 'Syntactic Sugar for Prototypes',
+        icon: '🎓',
+        content: [
+          {
+            type: 'explanation',
+            text: 'ES6 classes provide a cleaner syntax for creating objects and implementing inheritance. They are syntactic sugar over prototypes.'
+          },
+          {
+            type: 'code',
+            title: 'Basic Class',
+            code: `class Circle {
+  constructor(radius) {
+    this.radius = radius;
+  }
+  
+  // Method (automatically added to prototype)
+  draw() {
+    console.log('Drawing circle with radius: ' + this.radius);
+  }
+  
+  getArea() {
+    return Math.PI * this.radius * this.radius;
+  }
+}
+
+let c = new Circle(5);
+c.draw();
+console.log('Area:', c.getArea().toFixed(2));`,
+            runnable: true
+          },
+          {
+            type: 'code',
+            title: 'Static Methods',
+            code: `class MathHelper {
+  static add(a, b) {
+    return a + b;
+  }
+  
+  static multiply(a, b) {
+    return a * b;
+  }
+}
+
+// Called on class, not instance
+console.log('5 + 3 =', MathHelper.add(5, 3));
+console.log('5 × 3 =', MathHelper.multiply(5, 3));`,
+            runnable: true
+          },
+          {
+            type: 'code',
+            title: 'Class Inheritance',
+            code: `class Shape {
+  constructor(color) {
+    this.color = color;
+  }
+  
+  draw() {
+    console.log('Drawing a ' + this.color + ' shape');
+  }
+}
+
+class Circle extends Shape {
+  constructor(radius, color) {
+    super(color);  // Call parent constructor
+    this.radius = radius;
+  }
+  
+  draw() {
+    super.draw();  // Call parent method
+    console.log('It is a circle with radius: ' + this.radius);
+  }
+}
+
+let circle = new Circle(5, 'blue');
+circle.draw();`,
+            runnable: true
+          }
+        ],
+        quiz: {
+          question: 'What does the "extends" keyword do?',
+          options: [
+            'Creates a new class',
+            'Sets up prototypal inheritance',
+            'Copies methods from parent to child',
+            'Deletes the parent class'
+          ],
+          correct: 1,
+          explanation: 'The "extends" keyword sets up prototypal inheritance, making the child class inherit from the parent class.'
+        }
+      },
+      {
+        id: 'arrow-functions',
+        title: 'Arrow Functions',
+        subtitle: 'Concise Function Syntax',
+        icon: '➡️',
+        content: [
+          {
+            type: 'explanation',
+            text: 'Arrow functions provide a shorter syntax for writing functions. They also lexically bind "this".'
+          },
+          {
+            type: 'code',
+            title: 'Arrow Function Syntax',
+            code: `// Traditional function
+let greet1 = function(name) {
+  return 'Hello ' + name;
+};
+
+// Arrow function
+let greet2 = (name) => {
+  return 'Hello ' + name;
+};
+
+// Implicit return (one expression)
+let greet3 = (name) => 'Hello ' + name;
+
+// Single parameter (no parentheses needed)
+let greet4 = name => 'Hello ' + name;
+
+console.log(greet1('Alice'));
+console.log(greet2('Bob'));
+console.log(greet3('Charlie'));
+console.log(greet4('Diana'));`,
+            runnable: true
+          },
+          {
+            type: 'code',
+            title: 'Arrow Functions and "this"',
+            code: `const person = {
+  name: 'Alice',
+  hobbies: ['reading', 'coding', 'gaming'],
+  
+  showHobbies: function() {
+    // Arrow function inherits "this" from parent scope
+    this.hobbies.forEach(hobby => {
+      console.log(this.name + ' likes ' + hobby);
+    });
+  }
+};
+
+person.showHobbies();`,
+            runnable: true
+          }
+        ],
+        quiz: {
+          question: 'What is a key difference between arrow functions and regular functions?',
+          options: [
+            'Arrow functions are faster',
+            'Arrow functions lexically bind "this"',
+            'Arrow functions can only take one parameter',
+            'Arrow functions cannot return values'
+          ],
+          correct: 1,
+          explanation: 'Arrow functions do not have their own "this". They inherit "this" from the enclosing scope.'
+        }
+      },
+      {
+        id: 'destructuring',
+        title: 'Destructuring',
+        subtitle: 'Extract Values Easily',
+        icon: '📦',
+        content: [
+          {
+            type: 'explanation',
+            text: 'Destructuring allows you to extract values from arrays and objects into separate variables.'
+          },
+          {
+            type: 'code',
+            title: 'Array Destructuring',
+            code: `const vehicles = ['mustang', 'f-150', 'expedition'];
+
+// Old way
+const car1 = vehicles[0];
+const truck1 = vehicles[1];
+
+// Destructuring
+const [car, truck, suv] = vehicles;
+console.log('Car:', car);
+console.log('Truck:', truck);
+console.log('SUV:', suv);
+
+// Skip elements
+const [first, , third] = vehicles;
+console.log('First:', first);
+console.log('Third:', third);`,
+            runnable: true
+          },
+          {
+            type: 'code',
+            title: 'Object Destructuring',
+            code: `const person = {
+  name: 'Alice',
+  age: 25,
+  city: 'Wonderland'
+};
+
+// Extract properties
+const { name, age, city } = person;
+console.log('Name:', name);
+console.log('Age:', age);
+console.log('City:', city);
+
+// Rename variables
+const { name: personName, age: personAge } = person;
+console.log('Person name:', personName);`,
+            runnable: true
+          },
+          {
+            type: 'code',
+            title: 'Rest Operator',
+            code: `const numbers = [1, 2, 3, 4, 5, 6];
+const [one, two, ...rest] = numbers;
+
+console.log('First:', one);
+console.log('Second:', two);
+console.log('Rest:', rest);`,
+            runnable: true
+          }
+        ],
+        quiz: {
+          question: 'What does destructuring do?',
+          options: [
+            'Deletes properties from objects',
+            'Extracts values into separate variables',
+            'Combines multiple objects',
+            'Converts objects to arrays'
+          ],
+          correct: 1,
+          explanation: 'Destructuring extracts values from arrays or properties from objects into distinct variables.'
+        }
+      },
+      {
+        id: 'spread-operator',
+        title: 'Spread Operator',
+        subtitle: 'Expand and Copy',
+        icon: '🌟',
+        content: [
+          {
+            type: 'explanation',
+            text: 'The spread operator (...) expands arrays and objects. It is useful for copying and combining data.'
+          },
+          {
+            type: 'code',
+            title: 'Spread with Arrays',
+            code: `const numbersOne = [1, 2, 3];
+const numbersTwo = [4, 5, 6];
+
+// Combine arrays
+const combined = [...numbersOne, ...numbersTwo];
+console.log('Combined:', combined);
+
+// Add elements
+const withExtra = [0, ...numbersOne, 3.5, ...numbersTwo, 7];
+console.log('With extra:', withExtra);`,
+            runnable: true
+          },
+          {
+            type: 'code',
+            title: 'Spread with Objects',
+            code: `const person = {
+  name: 'Alice',
+  age: 25,
+  city: 'Wonderland'
+};
+
+// Shallow copy
+const personCopy = { ...person };
+personCopy.age = 26;
+
+console.log('Original age:', person.age);
+console.log('Copy age:', personCopy.age);
+
+// Combine objects
+const extra = { country: 'USA', hobby: 'reading' };
+const complete = { ...person, ...extra };
+console.log('Complete:', complete);`,
+            runnable: true
+          },
+          {
+            type: 'code',
+            title: 'Shallow vs Deep Copy',
+            code: `const original = {
+  name: 'John',
+  details: {
+    age: 30,
+    city: 'NYC'
+  }
+};
+
+// Shallow copy - nested objects are still referenced
+const shallow = { ...original };
+shallow.details.age = 31;
+console.log('Original age:', original.details.age); // Changed!
+
+// Deep copy
+const deep = JSON.parse(JSON.stringify(original));
+deep.details.age = 32;
+console.log('After deep copy, original age:', original.details.age);`,
+            runnable: true
+          }
+        ],
+        quiz: {
+          question: 'What does the spread operator do with objects?',
+          options: [
+            'Deletes all properties',
+            'Creates a shallow copy',
+            'Creates a deep copy',
+            'Converts to an array'
+          ],
+          correct: 1,
+          explanation: 'The spread operator creates a shallow copy - nested objects are still referenced, not copied.'
+        }
+      },
+      {
+        id: 'array-methods',
+        title: 'Array Methods',
+        subtitle: 'map, filter, find, and more',
+        icon: '🔧',
+        content: [
+          {
+            type: 'explanation',
+            text: 'Modern JavaScript provides powerful array methods for transforming and filtering data.'
+          },
+          {
+            type: 'code',
+            title: 'map() - Transform Elements',
+            code: `const numbers = [1, 2, 3, 4, 5];
+
+// Multiply each number by 10
+const multiplied = numbers.map(num => num * 10);
+console.log('Multiplied:', multiplied);
+
+// Square each number
+const squared = numbers.map(num => num * num);
+console.log('Squared:', squared);`,
+            runnable: true
+          },
+          {
+            type: 'code',
+            title: 'filter() - Select Elements',
+            code: `const ages = [32, 15, 18, 12, 40, 17];
+
+// Filter adults (18+)
+const adults = ages.filter(age => age >= 18);
+console.log('Adults:', adults);
+
+// Filter minors
+const minors = ages.filter(age => age < 18);
+console.log('Minors:', minors);`,
+            runnable: true
+          },
+          {
+            type: 'code',
+            title: 'find() - Find First Match',
+            code: `const people = [
+  { name: 'Alice', age: 25 },
+  { name: 'Bob', age: 30 },
+  { name: 'Charlie', age: 20 }
+];
+
+// Find first person over 25
+const result = people.find(person => person.age > 25);
+console.log('Found:', result);
+
+// Find person named Bob
+const bob = people.find(person => person.name === 'Bob');
+console.log('Bob:', bob);`,
+            runnable: true
+          },
+          {
+            type: 'code',
+            title: 'Chaining Methods',
+            code: `const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
+// Get squares of even numbers
+const result = numbers
+  .filter(num => num % 2 === 0)  // [2, 4, 6, 8, 10]
+  .map(num => num * num);        // [4, 16, 36, 64, 100]
+
+console.log('Result:', result);`,
+            runnable: true
+          }
+        ],
+        quiz: {
+          question: 'What does the map() method do?',
+          options: [
+            'Filters elements based on a condition',
+            'Finds the first matching element',
+            'Transforms each element and returns a new array',
+            'Removes elements from an array'
+          ],
+          correct: 2,
+          explanation: 'map() transforms each element using a callback function and returns a new array with the transformed values.'
+        }
+      },
+      {
+        id: 'callbacks',
+        title: 'Callbacks',
+        subtitle: 'Handling Asynchronous Code',
+        icon: '📞',
+        content: [
+          {
+            type: 'explanation',
+            text: 'Callbacks are functions passed as arguments to other functions, executed after an asynchronous operation completes.'
+          },
+          {
+            type: 'code',
+            title: 'Simple Callback',
+            code: `function getUser(id, callback) {
+  setTimeout(function() {
+    console.log('Reading user from database...');
+    callback({ id: id, name: 'Alice' });
+  }, 1000);
+}
+
+console.log('Before');
+getUser(1, function(user) {
+  console.log('Received user:', user.name);
+});
+console.log('After');`,
+            runnable: true
+          },
+          {
+            type: 'code',
+            title: 'Callback Hell',
+            code: `// This is callback hell - hard to read!
+function getUser(callback) {
+  setTimeout(() => callback({ username: 'alice' }), 500);
+}
+
+function getRepos(username, callback) {
+  setTimeout(() => callback(['repo1', 'repo2']), 500);
+}
+
+function getCommits(repo, callback) {
+  setTimeout(() => callback(['commit1', 'commit2']), 500);
+}
+
+getUser(user => {
+  console.log('User:', user.username);
+  getRepos(user.username, repos => {
+    console.log('Repos:', repos);
+    getCommits(repos[0], commits => {
+      console.log('Commits:', commits);
+    });
+  });
+});`,
+            runnable: true
+          }
+        ],
+        quiz: {
+          question: 'What is "callback hell"?',
+          options: [
+            'When callbacks throw errors',
+            'Deeply nested callbacks that are hard to read',
+            'When callbacks run too slowly',
+            'When too many callbacks are defined'
+          ],
+          correct: 1,
+          explanation: 'Callback hell refers to deeply nested callbacks that make code hard to read and maintain.'
+        }
+      },
+      {
+        id: 'promises',
+        title: 'Promises',
+        subtitle: 'Better Async Handling',
+        icon: '🤝',
+        content: [
+          {
+            type: 'explanation',
+            text: 'Promises represent a value that may be available now, later, or never. They provide a cleaner way to handle asynchronous operations.'
+          },
+          {
+            type: 'code',
+            title: 'Creating a Promise',
+            code: `const myPromise = new Promise((resolve, reject) => {
+  setTimeout(() => {
+    const success = true;
+    if (success) {
+      resolve('Operation successful!');
+    } else {
+      reject('Operation failed!');
+    }
+  }, 1000);
+});
+
+myPromise
+  .then(result => console.log('Success:', result))
+  .catch(error => console.log('Error:', error))
+  .finally(() => console.log('Promise completed'));`,
+            runnable: true
+          },
+          {
+            type: 'code',
+            title: 'Chaining Promises',
+            code: `function getUser() {
+  return new Promise(resolve => {
+    setTimeout(() => resolve({ username: 'alice' }), 500);
+  });
+}
+
+function getRepos(username) {
+  return new Promise(resolve => {
+    setTimeout(() => resolve(['repo1', 'repo2']), 500);
+  });
+}
+
+function getCommits(repo) {
+  return new Promise(resolve => {
+    setTimeout(() => resolve(['commit1', 'commit2']), 500);
+  });
+}
+
+// Clean chain!
+getUser()
+  .then(user => {
+    console.log('User:', user.username);
+    return getRepos(user.username);
+  })
+  .then(repos => {
+    console.log('Repos:', repos);
+    return getCommits(repos[0]);
+  })
+  .then(commits => {
+    console.log('Commits:', commits);
+  })
+  .catch(err => console.log('Error:', err));`,
+            runnable: true
+          },
+          {
+            type: 'code',
+            title: 'Promise.all()',
+            code: `const promise1 = Promise.resolve(10);
+const promise2 = Promise.resolve(20);
+const promise3 = Promise.resolve(30);
+
+// Wait for all promises
+Promise.all([promise1, promise2, promise3])
+  .then(results => {
+    console.log('All results:', results);
+    console.log('Sum:', results.reduce((a, b) => a + b, 0));
+  });`,
+            runnable: true
+          }
+        ],
+        quiz: {
+          question: 'What does Promise.all() do?',
+          options: [
+            'Runs promises one by one',
+            'Waits for all promises to resolve',
+            'Returns the first resolved promise',
+            'Cancels all promises'
+          ],
+          correct: 1,
+          explanation: 'Promise.all() waits for all promises to resolve and returns an array of results. If any promise rejects, it immediately rejects.'
+        }
+      },
+      {
+        id: 'async-await',
+        title: 'Async/Await',
+        subtitle: 'Cleaner Async Code',
+        icon: '⏱️',
+        content: [
+          {
+            type: 'explanation',
+            text: 'Async/await is syntactic sugar for promises, making asynchronous code look synchronous and easier to read.'
+          },
+          {
+            type: 'code',
+            title: 'Basic Async/Await',
+            code: `function delay(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function example() {
+  console.log('Starting...');
+  await delay(1000);
+  console.log('1 second passed');
+  await delay(1000);
+  console.log('2 seconds passed');
+  return 'Done!';
+}
+
+example().then(result => console.log(result));`,
+            runnable: true
+          },
+          {
+            type: 'code',
+            title: 'Error Handling',
+            code: `function getUser(id) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      if (id > 0) {
+        resolve({ id, name: 'Alice' });
+      } else {
+        reject('Invalid ID');
+      }
+    }, 500);
+  });
+}
+
+async function displayUser(id) {
+  try {
+    const user = await getUser(id);
+    console.log('User:', user);
+  } catch (error) {
+    console.log('Error:', error);
+  }
+}
+
+displayUser(1);   // Success
+displayUser(-1);  // Error`,
+            runnable: true
+          },
+          {
+            type: 'code',
+            title: 'Sequential vs Parallel',
+            code: `function fetchData(id) {
+  return new Promise(resolve => {
+    setTimeout(() => resolve('Data ' + id), 1000);
+  });
+}
+
+// Sequential (one by one)
+async function sequential() {
+  console.log('Sequential start');
+  const d1 = await fetchData(1);  // Wait 1s
+  const d2 = await fetchData(2);  // Wait 1s
+  console.log('Sequential done:', d1, d2); // Total: 2s
+}
+
+// Parallel (at the same time)
+async function parallel() {
+  console.log('Parallel start');
+  const [d1, d2] = await Promise.all([
+    fetchData(1),
+    fetchData(2)
+  ]); // Both wait together
+  console.log('Parallel done:', d1, d2); // Total: 1s
+}
+
+sequential();`,
+            runnable: true
+          }
+        ],
+        quiz: {
+          question: 'What does the "await" keyword do?',
+          options: [
+            'Stops the entire program',
+            'Pauses execution until the promise resolves',
+            'Makes the code run faster',
+            'Creates a new promise'
+          ],
+          correct: 1,
+          explanation: 'The "await" keyword pauses the execution of an async function until the promise resolves, then returns the result.'
+        }
+      },
+      {
+        id: 'event-loop',
+        title: 'Event Loop',
+        subtitle: 'Understanding Async Execution',
+        icon: '🔄',
+        content: [
+          {
+            type: 'explanation',
+            text: 'The event loop is a mechanism that allows JavaScript to perform non-blocking operations by offloading operations to the system kernel.'
+          },
+          {
+            type: 'code',
+            title: 'Event Loop Basics',
+            code: `console.log('1');
+
+setTimeout(() => {
+  console.log('2');
+}, 0);
+
+console.log('3');
+
+// Output: 1, 3, 2
+// Why? setTimeout is async, even with 0ms delay`,
+            runnable: true
+          },
+          {
+            type: 'code',
+            title: 'Microtasks vs Macrotasks',
+            code: `console.log('Start');
+
+// Macrotask (setTimeout)
+setTimeout(() => {
+  console.log('Macrotask: setTimeout');
+}, 0);
+
+// Microtask (Promise)
+Promise.resolve().then(() => {
+  console.log('Microtask: Promise.then');
+});
+
+console.log('End');
+
+// Output: Start, End, Microtask, Macrotask
+// Microtasks run before macrotasks!`,
+            runnable: true
+          },
+          {
+            type: 'code',
+            title: 'Execution Order',
+            code: `console.log('1: Sync');
+
+setTimeout(() => console.log('2: Macrotask'), 0);
+
+Promise.resolve()
+  .then(() => console.log('3: Microtask 1'))
+  .then(() => console.log('4: Microtask 2'));
+
+console.log('5: Sync');
+
+// Order:
+// 1. All synchronous code
+// 2. All microtasks
+// 3. One macrotask
+// 4. Repeat`,
+            runnable: true
+          }
+        ],
+        quiz: {
+          question: 'What runs first after synchronous code?',
+          options: [
+            'setTimeout callbacks',
+            'Promise.then callbacks (microtasks)',
+            'setInterval callbacks',
+            'All run at the same time'
+          ],
+          correct: 1,
+          explanation: 'Microtasks (like Promise.then) run before macrotasks (like setTimeout) after the synchronous code completes.'
+        }
+      },
+      {
+        id: 'modules',
+        title: 'Modules',
+        subtitle: 'Organizing Code',
+        icon: '📚',
+        content: [
+          {
+            type: 'explanation',
+            text: 'Modules allow you to split code into separate files and import/export functionality between them.'
+          },
+          {
+            type: 'code',
+            title: 'CommonJS (Node.js)',
+            code: `// circle.js
+function Circle(radius) {
+  this.radius = radius;
+  this.draw = function() {
+    console.log('Drawing circle');
+  };
+}
+
+module.exports = Circle;
+
+// main.js
+const Circle = require('./circle');
+const c = new Circle(5);
+c.draw();
+
+// Note: This code shows the syntax but won't run in browser`,
+            runnable: false
+          },
+          {
+            type: 'code',
+            title: 'ES6 Modules',
+            code: `// circle.js
+export class Circle {
+  constructor(radius) {
+    this.radius = radius;
+  }
+  
+  draw() {
+    console.log('Drawing circle');
+  }
+}
+
+export const PI = 3.14159;
+
+// main.js
+import { Circle, PI } from './circle.js';
+const c = new Circle(5);
+
+// Note: This code shows the syntax but won't run in browser`,
+            runnable: false
+          },
+          {
+            type: 'code',
+            title: 'Default Exports',
+            code: `// calculator.js
+export default class Calculator {
+  add(a, b) {
+    return a + b;
+  }
+  
+  multiply(a, b) {
+    return a * b;
+  }
+}
+
+// main.js
+import Calculator from './calculator.js';
+const calc = new Calculator();
+
+// Named + Default
+export default Circle;
+export { PI, calculateArea };
+
+// Note: This code shows the syntax`,
+            runnable: false
+          }
+        ],
+        quiz: {
+          question: 'What is the difference between CommonJS and ES6 modules?',
+          options: [
+            'No difference, they are the same',
+            'CommonJS uses require/module.exports, ES6 uses import/export',
+            'CommonJS is faster',
+            'ES6 modules only work in Node.js'
+          ],
+          correct: 1,
+          explanation: 'CommonJS uses require/module.exports (Node.js), while ES6 uses import/export (modern JavaScript standard).'
+        }
+      }
+    ];
+
+    // Main App Component
+    function App() {
+      const [currentTopicIndex, setCurrentTopicIndex] = useState(0);
+      const [completedTopics, setCompletedTopics] = useState({});
+      const [selectedAnswer, setSelectedAnswer] = useState(null);
+      const [showQuizFeedback, setShowQuizFeedback] = useState(false);
+      const [codeOutputs, setCodeOutputs] = useState({});
+
+      const currentTopic = courseData[currentTopicIndex];
+      const progress = (Object.keys(completedTopics).length / courseData.length) * 100;
+
+      useEffect(() => {
+        // Load progress from storage
+        const loadProgress = async () => {
+          try {
+            const result = await window.storage.get('completed-topics');
+            if (result) {
+              setCompletedTopics(JSON.parse(result.value));
+            }
+          } catch (error) {
+            console.log('No saved progress');
+          }
+        };
+        loadProgress();
+      }, []);
+
+      const markTopicComplete = async () => {
+        const newCompleted = { ...completedTopics, [currentTopic.id]: true };
+        setCompletedTopics(newCompleted);
+        
+        try {
+          await window.storage.set('completed-topics', JSON.stringify(newCompleted));
+        } catch (error) {
+          console.log('Could not save progress');
+        }
+      };
+
+      const runCode = (code, index) => {
+        try {
+          // Capture console.log
+          const logs = [];
+          const originalLog = console.log;
+          console.log = (...args) => {
+            logs.push(args.map(arg => 
+              typeof arg === 'object' ? JSON.stringify(arg, null, 2) : String(arg)
+            ).join(' '));
+          };
+
+          // Run code
+          eval(code);
+
+          // Restore console.log
+          console.log = originalLog;
+
+          // Store output
+          setCodeOutputs(prev => ({
+            ...prev,
+            [index]: logs.join('\n')
+          }));
+        } catch (error) {
+          setCodeOutputs(prev => ({
+            ...prev,
+            [index]: 'Error: ' + error.message
+          }));
+        }
+      };
+
+      const copyCode = (code) => {
+        navigator.clipboard.writeText(code);
+      };
+
+      const checkAnswer = () => {
+        if (selectedAnswer === currentTopic.quiz.correct) {
+          markTopicComplete();
+        }
+        setShowQuizFeedback(true);
+      };
+
+      const nextTopic = () => {
+        if (currentTopicIndex < courseData.length - 1) {
+          setCurrentTopicIndex(currentTopicIndex + 1);
+          setSelectedAnswer(null);
+          setShowQuizFeedback(false);
+          setCodeOutputs({});
+          window.scrollTo(0, 0);
+        }
+      };
+
+      const prevTopic = () => {
+        if (currentTopicIndex > 0) {
+          setCurrentTopicIndex(currentTopicIndex - 1);
+          setSelectedAnswer(null);
+          setShowQuizFeedback(false);
+          setCodeOutputs({});
+          window.scrollTo(0, 0);
+        }
+      };
+
+      return (
+        <div className="app-container">
+          <div className="bg-animation">
+            <div className="bg-grid"></div>
+            <div className="bg-gradient bg-gradient-1"></div>
+            <div className="bg-gradient bg-gradient-2"></div>
+          </div>
+
+          {/* Sidebar */}
+          <div className="sidebar">
+            <div className="sidebar-header">
+              <div className="logo">Advanced JS</div>
+              <div className="progress-container">
+                <div className="progress-label">
+                  <span>Progress</span>
+                  <span>{Math.round(progress)}%</span>
+                </div>
+                <div className="progress-bar">
+                  <div className="progress-fill" style={{ width: progress + '%' }}></div>
+                </div>
+              </div>
+            </div>
+
+            <div className="topics-list">
+              {courseData.map((topic, index) => (
+                <div
+                  key={topic.id}
+                  className={`topic-item ${index === currentTopicIndex ? 'active' : ''} ${completedTopics[topic.id] ? 'completed' : ''}`}
+                  onClick={() => {
+                    setCurrentTopicIndex(index);
+                    setSelectedAnswer(null);
+                    setShowQuizFeedback(false);
+                    setCodeOutputs({});
+                  }}
+                >
+                  <span className="topic-icon">{topic.icon}</span>
+                  <span className="topic-name">{topic.title}</span>
+                  {completedTopics[topic.id] && <span className="check-icon">✓</span>}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Main Content */}
+          <div className="main-content">
+            <div className="content-wrapper">
+              <div className="topic-header">
+                <div className="topic-title">{currentTopic.icon} {currentTopic.title}</div>
+                <div className="topic-subtitle">{currentTopic.subtitle}</div>
+              </div>
+
+              {/* Content Sections */}
+              {currentTopic.content.map((section, index) => (
+                <div key={index} className="section">
+                  {section.type === 'explanation' && (
+                    <>
+                      <div className="section-title">
+                        <i data-lucide="book-open"></i>
+                        Explanation
+                      </div>
+                      <div className="section-content">{section.text}</div>
+                    </>
+                  )}
+
+                  {section.type === 'code' && (
+                    <>
+                      <div className="section-title">
+                        <i data-lucide="code-2"></i>
+                        {section.title}
+                      </div>
+                      <div className="code-block">
+                        <div className="code-header">
+                          <div className="code-title">
+                            <i data-lucide="terminal"></i>
+                            JavaScript
+                          </div>
+                          <div style={{ display: 'flex', gap: '8px' }}>
+                            {section.runnable && (
+                              <button className="run-button" onClick={() => runCode(section.code, index)}>
+                                <i data-lucide="play"></i>
+                                Run
+                              </button>
+                            )}
+                            <button className="copy-button" onClick={() => copyCode(section.code)}>
+                              <i data-lucide="copy"></i>
+                              Copy
+                            </button>
+                          </div>
+                        </div>
+                        <div className="code-content">
+                          <pre>{section.code}</pre>
+                        </div>
+                      </div>
+                      {codeOutputs[index] && (
+                        <div className="output-container">
+                          <div className="output-header">
+                            <i data-lucide="terminal-square"></i>
+                            Output
+                          </div>
+                          <div className="output-content">{codeOutputs[index]}</div>
+                        </div>
+                      )}
+                    </>
+                  )}
+                </div>
+              ))}
+
+              {/* Quiz */}
+              <div className="quiz-container">
+                <div className="quiz-header">
+                  <i data-lucide="help-circle"></i>
+                  Test Your Knowledge
+                </div>
+                <div className="quiz-question">{currentTopic.quiz.question}</div>
+                <div className="quiz-options">
+                  {currentTopic.quiz.options.map((option, index) => (
+                    <div
+                      key={index}
+                      className={`quiz-option ${selectedAnswer === index ? 'selected' : ''} ${
+                        showQuizFeedback && index === currentTopic.quiz.correct ? 'correct' : ''
+                      } ${
+                        showQuizFeedback && selectedAnswer === index && index !== currentTopic.quiz.correct ? 'incorrect' : ''
+                      }`}
+                      onClick={() => !showQuizFeedback && setSelectedAnswer(index)}
+                    >
+                      {option}
+                    </div>
+                  ))}
+                </div>
+                {!showQuizFeedback && (
+                  <div className="quiz-buttons">
+                    <button
+                      className="quiz-button"
+                      onClick={checkAnswer}
+                      disabled={selectedAnswer === null}
+                    >
+                      Check Answer
+                    </button>
+                  </div>
+                )}
+                {showQuizFeedback && (
+                  <div className={`quiz-feedback ${selectedAnswer === currentTopic.quiz.correct ? 'correct' : 'incorrect'}`}>
+                    <strong>
+                      {selectedAnswer === currentTopic.quiz.correct ? '✓ Correct!' : '✗ Incorrect'}
+                    </strong>
+                    <br />
+                    {currentTopic.quiz.explanation}
+                  </div>
+                )}
+              </div>
+
+              {/* Navigation */}
+              <div className="nav-buttons">
+                <button className="nav-button" onClick={prevTopic} disabled={currentTopicIndex === 0}>
+                  <i data-lucide="chevron-left"></i>
+                  Previous
+                </button>
+                <button className="nav-button" onClick={nextTopic} disabled={currentTopicIndex === courseData.length - 1}>
+                  Next
+                  <i data-lucide="chevron-right"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // Render
+    ReactDOM.render(<App />, document.getElementById('root'));
+
+    // Initialize Lucide icons
+    lucide.createIcons();
+  </script>
+</body>
+</html>
